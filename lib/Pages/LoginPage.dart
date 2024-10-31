@@ -171,12 +171,16 @@ class _LoginPageState extends State<LoginPage> {
                             print(senha);
 
                             Funcionario? funcionario = funcionarios.firstWhere(
-                                (Funcionario func) =>
-                                    func.GetNome() == nome &&
-                                    func.GetSenha() == senha);
+                                (Funcionario func) => func.GetNome() == nome);
+                            if (funcionario == null)
+                              print("este funcionario nao existe");
 
-                            if (funcionario == null) {
-                              print("nao existe");
+                            if (funcionario.senha != senha)
+                              print("senha incorreta.");
+                            if (funcionario.senha != senha ||
+                                funcionario.nome != nome) {
+                              print("nao foi possivel fazer o login");
+                              return;
                             } else if (funcionario.cargo == Cargo.Gerente) {
                               Navigator.push(
                                   context,
