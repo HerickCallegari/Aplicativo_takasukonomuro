@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/GerentePage.dart';
+import 'package:takasukonomuro/Pages/MesasPage.dart';
+import 'package:takasukonomuro/models/Cargo.dart';
+import 'package:takasukonomuro/models/Funcionario.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +14,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    String nome = '';
+    String senha = '';
+
+    List<Funcionario> funcionarios = [
+      Funcionario(nome: "herick", senha: "123", cargo: Cargo.Garcom),
+      Funcionario(nome: "Kiria", senha: "123", cargo: Cargo.Gerente),
+    ];
     return Scaffold(
       resizeToAvoidBottomInset:
           false, // Impede que o layout seja redimensionado
@@ -88,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 5),
                         TextField(
+                          onChanged: (value) => nome = value,
                           style: const TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 16), // Fonte Roboto
@@ -110,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 5),
                         TextField(
+                          onChanged: (value) => senha = value,
                           obscureText: true, // Oculta a senha
                           style: const TextStyle(
                               fontFamily: 'Roboto',
@@ -124,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text(
+                        /*const Text(
                           'Cargo',
                           style: TextStyle(
                               fontSize: 16,
@@ -151,14 +163,34 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text('Funcionário')),
                           ],
                           onChanged: (value) {},
-                        ),
+                        ),*/
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => GerentePage()));
+                            print(nome);
+                            print(senha);
+
+                            Funcionario? funcionario = funcionarios.firstWhere(
+                                (Funcionario func) =>
+                                    func.GetNome() == nome &&
+                                    func.GetSenha() == senha);
+
+                            if (funcionario == null) {
+                              print("nao existe");
+                            } else if (funcionario.cargo == Cargo.Gerente) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GerentePage()));
+                            } else if (funcionario.cargo == Cargo.Garcom) {
+                              print(funcionario.nome);
+                              print(funcionario.senha);
+                              print(funcionario.cargo);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MesasPage()));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15),

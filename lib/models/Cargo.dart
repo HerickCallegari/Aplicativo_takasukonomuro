@@ -1,0 +1,1 @@
+enum Cargo { Gerente, Garcom }
