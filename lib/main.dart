@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:takasukonomuro/MyApp.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:takasukonomuro/models/Funcionario.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,3 +16,5 @@ Future<void> main() async {
 
   runApp(const MyApp());
 }
+
+final supabase = Supabase.instance.client;

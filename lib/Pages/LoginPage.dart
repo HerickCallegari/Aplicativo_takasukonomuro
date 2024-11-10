@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:takasukonomuro/Pages/GerentePage.dart';
 import 'package:takasukonomuro/Pages/MesasPage.dart';
+import 'package:takasukonomuro/main.dart';
 import 'package:takasukonomuro/models/Cargo.dart';
 import 'package:takasukonomuro/models/Funcionario.dart';
 
@@ -18,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   String senha = '';
   String? errorMessage;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,11 +155,10 @@ class _LoginPageState extends State<LoginPage> {
                           ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Funcionario? funcionario =
-                                    funcionarios.firstWhere(
-                                        (Funcionario func) =>
-                                            (await Supabase.instance.client.from('Funcionarios').select('Senha')) as String == nome,
-                                        orElse: null);
+                                var funcionarios =
+                                    supabase.from("Funcionario").select('*');
+
+                                Funcionario? funcionario = null;
 
                                 if (funcionario == null) {
                                   setState(() {
