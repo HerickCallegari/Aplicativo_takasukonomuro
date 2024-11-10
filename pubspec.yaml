@@ -14,9 +14,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^5.0.0
+  flutter_dotenv: ^5.0.2
   intl: ^0.17.0
-
+  provider: ^5.0.0
+  supabase_flutter: ^2.8.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -33,9 +34,8 @@ flutter:
   assets:
     - assets/images/yaki.jpg
     - assets/images/fundo_login.png
-
-
-
+    - assets/Dev.env
+  
   fonts:
      - family: PlayFairDisplay
        fonts:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:takasukonomuro/Pages/GerentePage.dart';
 import 'package:takasukonomuro/Pages/MesasPage.dart';
 import 'package:takasukonomuro/models/Cargo.dart';
@@ -13,15 +14,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  String nome = '';
+  String login = '';
   String senha = '';
   String? errorMessage;
 
-  List<Funcionario> funcionarios = [
-    Funcionario(nome: "herick", senha: "123", cargo: Cargo.Garcom),
-    Funcionario(nome: "Kiria", senha: "123", cargo: Cargo.Gerente),
-  ];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,13 +84,13 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 10),
                           const Text(
-                            'por favor, insira nome e senha',
+                            'por favor, insira Login e senha',
                             style: TextStyle(
                                 fontSize: 14, fontFamily: 'PlayFairDisplay'),
                           ),
                           const SizedBox(height: 20),
                           const Text(
-                            'Nome',
+                            'Login',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -101,10 +98,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 5),
                           TextFormField(
-                            onChanged: (value) => nome = value,
+                            onChanged: (value) => login = value,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Por favor, insira o nome';
+                                return 'Por favor, insira o Login';
                               }
                               return null;
                             },
@@ -114,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              hintText: 'Ex: Herick Campos Calligari',
+                              hintText: 'Ex: 2537',
                               hintStyle: const TextStyle(fontFamily: 'Roboto'),
                             ),
                           ),
@@ -162,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Funcionario? funcionario =
                                     funcionarios.firstWhere(
                                         (Funcionario func) =>
-                                            func.GetNome() == nome,
+                                            (await Supabase.instance.client.from('Funcionarios').select('Senha')) as String == nome,
                                         orElse: null);
 
                                 if (funcionario == null) {
