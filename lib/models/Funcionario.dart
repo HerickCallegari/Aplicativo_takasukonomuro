@@ -1,4 +1,4 @@
-import 'package:takasukonomuro/models/Cargo.dart';
+import 'package:takasukonomuro/models/Enums/Cargo.dart';
 
 class Funcionario {
   late final int login;
@@ -14,7 +14,4 @@ class Funcionario {
     required this.senha,
     required this.cargo,
   });
-
-  String GetNome() => nome;
-  String GetSenha() => senha;
 }

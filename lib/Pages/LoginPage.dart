@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/GerentePage.dart';
 import 'package:takasukonomuro/Pages/MesasPage.dart';
-import 'package:takasukonomuro/main.dart';
-import 'package:takasukonomuro/models/Cargo.dart';
+import 'package:takasukonomuro/models/Enums/Cargo.dart';
 import 'package:takasukonomuro/models/Funcionario.dart';
 
 class LoginPage extends StatefulWidget {
@@ -155,10 +154,32 @@ class _LoginPageState extends State<LoginPage> {
                           ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                var funcionarios =
-                                    supabase.from("Funcionario").select('*');
+                                List<Funcionario> funcionarios = [
+                                  Funcionario(
+                                      login: 2,
+                                      cpf: "1214815",
+                                      nome: "kiria",
+                                      senha: "123",
+                                      cargo: Cargo.Gerente),
+                                  Funcionario(
+                                      login: 1,
+                                      cpf: "61871125",
+                                      nome: "herick",
+                                      senha: "123",
+                                      cargo: Cargo.Garcom)
+                                ];
 
-                                Funcionario? funcionario = null;
+                                // Convertendo o valor de `login` para int para comparar corretamente
+                                int? loginInt = int.tryParse(login);
+                                if (loginInt == null) {
+                                  setState(() {
+                                    errorMessage = "Login inválido";
+                                  });
+                                  return;
+                                }
+
+                                Funcionario? funcionario = funcionarios
+                                    .firstWhere((f) => f.login == loginInt);
 
                                 if (funcionario == null) {
                                   setState(() {
