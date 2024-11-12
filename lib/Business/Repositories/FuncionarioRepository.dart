@@ -25,9 +25,34 @@ class FuncionarioRepository implements IFuncionarioRepository {
   }
 
   @override
-  Future<Funcionario?> findBy(id) {
-    // TODO: implement findBy
-    throw UnimplementedError();
+  Future<Funcionario?> findBy(id) async {
+    // Faz a busca na tabela 'Funcionarios' pelo Login que corresponde ao id fornecido
+    final response = await supabase
+        .from('Funcionarios')
+        .select('CPF, Nome, Login, Senha, Cargo')
+        .eq('Login', id)
+        .single(); // single() assume que vai retornar apenas um funcionário
+
+    if (response != null && response is Map<String, dynamic>) {
+      Cargo cargo;
+      if (response['Cargo'] == 'Gerente') {
+        cargo = Cargo.Gerente;
+      } else {
+        cargo = Cargo.Garcom;
+      }
+
+      Funcionario funcionario = Funcionario(
+        cpf: response['CPF'],
+        nome: response['Nome'],
+        senha: response['Senha'],
+        cargo: cargo,
+        login: response['Login'],
+      );
+      return funcionario; // Retorne diretamente o funcionário
+    } else {
+      print("Dados do funcionário não encontrados.");
+      return null;
+    }
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/Business/Repositories/FuncionarioRepository.dart';
 import 'package:takasukonomuro/Pages/GerentePage.dart';
 import 'package:takasukonomuro/Pages/MesasPage.dart';
 import 'package:takasukonomuro/models/Enums/Cargo.dart';
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           const SizedBox(height: 30),
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 List<Funcionario> funcionarios = [
                                   Funcionario(
@@ -178,10 +179,10 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                   return;
                                 }
-
-                                Funcionario? funcionario = funcionarios
-                                    .firstWhere((f) => f.login == loginInt,
-                                        orElse: null);
+                                FuncionarioRepository repository =
+                                    FuncionarioRepository();
+                                Funcionario? funcionario =
+                                    await repository.findBy(login);
 
                                 if (funcionario == null) {
                                   setState(() {
