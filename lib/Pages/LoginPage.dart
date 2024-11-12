@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: 'Ex: 2537',
                               hintStyle: const TextStyle(fontFamily: 'Roboto'),
                             ),
+                            keyboardType: TextInputType.number,
                           ),
                           const SizedBox(height: 20),
                           const Text(
@@ -179,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                                 }
 
                                 Funcionario? funcionario = funcionarios
-                                    .firstWhere((f) => f.login == loginInt);
+                                    .firstWhere((f) => f.login == loginInt,
+                                        orElse: null);
 
                                 if (funcionario == null) {
                                   setState(() {
