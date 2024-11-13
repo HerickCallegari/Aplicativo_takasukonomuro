@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Business/Repositories/Interfaces/IRepository.dart';
+// ignore_for_file: unnecessary_null_comparison
+
+import 'package:takasukonomuro/business/repositories/interfaces/IFuncionarioRepository.dart';
 import 'package:takasukonomuro/main.dart';
 import 'package:takasukonomuro/models/Enums/Cargo.dart';
 import 'package:takasukonomuro/models/Funcionario.dart';
@@ -7,48 +8,63 @@ import 'package:takasukonomuro/models/Funcionario.dart';
 class FuncionarioRepository implements IFuncionarioRepository {
   @override
   Future<void> add(Funcionario funcionario) async {
-    final response =
-        await supabase.from('Funcionarios').insert([funcionario.toMap()]);
+    if (funcionario == null) throw Exception("Funcionario não pode ser null");
 
-    if (response.error != null) {
-      throw Exception(
-          "Erro ao inserir funcionário: ${response.error!.message}");
-    } else {
-      print("Funcionário inserido com sucesso!");
+    try {
+      await supabase.from('Funcionarios').insert([
+        {
+          // 'Login' será auto incremental no banco de dados
+          'CPF': funcionario.cpf,
+          'Senha': funcionario.senha,
+          'Nome': funcionario.nome,
+          'Cargo': funcionario.getCargo(),
+        }
+      ]);
+    } catch (e) {
+      print("Nao foi possivel inserir o funcionario");
     }
   }
 
   @override
-  Future<List<Funcionario>> findAll() {
-    // TODO: implement findAll
-    throw UnimplementedError();
+  Future<List<Funcionario>> findAll() async {
+    var responseList = await supabase.from("Funcionarios").select('*');
+    List<Funcionario> funcionarios = [];
+
+    for (var response in responseList) {
+      if (response != null && response is Map<String, dynamic>) {
+        Funcionario funcionario = Funcionario(
+          cpf: response['CPF'],
+          nome: response['Nome'],
+          senha: response['Senha'],
+          cargo: _getCargo(response),
+          login: response['Login'],
+        );
+
+        funcionarios.add(funcionario);
+      }
+    }
+
+    return funcionarios;
   }
 
   @override
   Future<Funcionario?> findBy(id) async {
-    // Faz a busca na tabela 'Funcionarios' pelo Login que corresponde ao id fornecido
-    final response = await supabase
+    var response = await supabase
         .from('Funcionarios')
         .select('CPF, Nome, Login, Senha, Cargo')
         .eq('Login', id)
-        .single(); // single() assume que vai retornar apenas um funcionário
+        .single();
 
+    // ignore: unnecessary_type_check
     if (response != null && response is Map<String, dynamic>) {
-      Cargo cargo;
-      if (response['Cargo'] == 'Gerente') {
-        cargo = Cargo.Gerente;
-      } else {
-        cargo = Cargo.Garcom;
-      }
-
       Funcionario funcionario = Funcionario(
         cpf: response['CPF'],
         nome: response['Nome'],
         senha: response['Senha'],
-        cargo: cargo,
+        cargo: _getCargo(response),
         login: response['Login'],
       );
-      return funcionario; // Retorne diretamente o funcionário
+      return funcionario;
     } else {
       print("Dados do funcionário não encontrados.");
       return null;
@@ -56,30 +72,33 @@ class FuncionarioRepository implements IFuncionarioRepository {
   }
 
   @override
-  Future<void> update(Funcionario objeto) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<void> update(Funcionario funcionario) async {
+    if (funcionario == null) throw Exception("Funcionario não pode ser null");
+
+    try {
+      await supabase.from('Funcionarios').update({
+        'CPF': funcionario.cpf,
+        'Senha': funcionario.senha,
+        'Nome': funcionario.nome,
+        'Cargo': funcionario.getCargo(),
+      }).eq('Login', funcionario.login.toString());
+    } catch (e) {
+      print("Nao foi possivel inserir o funcionario");
+    }
   }
 
   Future<Funcionario?> testFetchFuncionario() async {
-    final response =
+    var response =
         await supabase.from('Funcionarios').select().limit(1).single();
 
-    final data = response as Map;
+    var data = response as Map;
 
     if (data != null && data is Map<String, dynamic>) {
-      Cargo cargo;
-      if (data['Cargo'] == 'Gerente') {
-        cargo = Cargo.Gerente;
-      } else {
-        cargo = Cargo.Garcom;
-      }
-
       Funcionario funcionario = Funcionario(
         cpf: data['CPF'],
         nome: data['Nome'],
         senha: data['Senha'],
-        cargo: cargo,
+        cargo: _getCargo(data),
         login: data['Login'],
       );
       return funcionario;
@@ -87,5 +106,16 @@ class FuncionarioRepository implements IFuncionarioRepository {
       print("Dados do funcionário não encontrados.");
       return null;
     }
+  }
+
+  Cargo _getCargo(Map data) {
+    Cargo cargo;
+    if (data['Cargo'] == 'Gerente') {
+      cargo = Cargo.Gerente;
+    } else if (data['Cargo'] == 'Garcom') {
+      cargo = Cargo.Garcom;
+    } else
+      throw Exception("Funcionario sem cargo");
+    return cargo;
   }
 }

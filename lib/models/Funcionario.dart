@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:takasukonomuro/models/Enums/Cargo.dart';
 
 class Funcionario {
-  final int? login;
-  final String nome;
-  final String senha;
-  final Cargo cargo;
-  final String cpf;
+  int? login;
+  String nome;
+  String senha;
+  Cargo cargo;
+  String cpf;
 
   Funcionario({
     this.login,
@@ -15,14 +16,13 @@ class Funcionario {
     required this.cargo,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'nome': nome,
-      'login': login,
-      'senha': senha,
-      'cpf': cpf,
-      'cargo': cargo.index,
-    };
+  String getCargo() {
+    if (cargo == Cargo.Garcom) {
+      return 'Garcom';
+    } else if (cargo == Cargo.Gerente)
+      return 'Gerente';
+    else
+      throw new Exception("Funcionario sem Cargo");
   }
 
   @override

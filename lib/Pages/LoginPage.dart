@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Business/Repositories/FuncionarioRepository.dart';
-import 'package:takasukonomuro/Pages/GerentePage.dart';
-import 'package:takasukonomuro/Pages/MesasPage.dart';
+import 'package:takasukonomuro/business/repositories/FuncionarioRepository.dart';
+import 'package:takasukonomuro/pages/GerentePage.dart';
+import 'package:takasukonomuro/pages/MesasPage.dart';
 import 'package:takasukonomuro/models/Enums/Cargo.dart';
 import 'package:takasukonomuro/models/Funcionario.dart';
 
@@ -179,10 +179,18 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                   return;
                                 }
+                                /* 
+                                // caso queira mostrar a API
                                 FuncionarioRepository repository =
                                     FuncionarioRepository();
                                 Funcionario? funcionario =
                                     await repository.findBy(login);
+
+                                */
+                                // Para evitar usar a API e gastar tokens
+                                Funcionario? funcionario = funcionarios
+                                    .firstWhere((f) => f.login == loginInt,
+                                        orElse: null);
 
                                 if (funcionario == null) {
                                   setState(() {

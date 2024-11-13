@@ -1,4 +1,4 @@
-import 'package:takasukonomuro/Business/Services/Interfaces/IServices.dart';
+import 'package:takasukonomuro/business/services/Interfaces/IServices.dart';
 
 class FuncionarioService implements Iservices {
   @override
