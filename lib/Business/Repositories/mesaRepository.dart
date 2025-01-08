@@ -30,7 +30,7 @@ class MesaRepository implements IMesaRepository {
       for (var response in responseList) {
         if (response != null && response is Map<String, dynamic>) {
           Mesa mesa = Mesa(
-            id: response['id'],
+            mesaId: response['id'],
             descricao: response['descricao'],
             status: _getStatus(response),
           );
@@ -54,7 +54,7 @@ class MesaRepository implements IMesaRepository {
       // ignore: unnecessary_type_check
       if (response != null && response is Map<String, dynamic>) {
         Mesa mesa = Mesa(
-            id: response['id'],
+            mesaId: response['id'],
             descricao: response['descricao'],
             status: _getStatus(response));
         return mesa;
@@ -75,7 +75,7 @@ class MesaRepository implements IMesaRepository {
       await supabase
           .from('Mesas')
           .update({'descricao': mesa.descricao, 'status': mesa.getStatus()}).eq(
-              'id', mesa.id.toString());
+              'id', mesa.mesaId.toString());
     } catch (e) {
       rethrow;
     }
@@ -88,7 +88,7 @@ class MesaRepository implements IMesaRepository {
     try {
       if (data != null && data is Map<String, dynamic>) {
         Mesa mesa = Mesa(
-          id: response['id'],
+          mesaId: response['id'],
           descricao: response['descricao'],
           status: _getStatus(response),
         );

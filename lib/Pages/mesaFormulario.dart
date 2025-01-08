@@ -39,7 +39,7 @@ class _MesaFormularioState extends State<MesaFormulario> {
               children: [
                 // Campo de ID
                 TextFormField(
-                  initialValue: widget.mesa?.id?.toString() ?? '',
+                  initialValue: widget.mesa?.mesaId?.toString() ?? '',
                   decoration: const InputDecoration(
                     labelText: "ID da Mesa",
                     border: OutlineInputBorder(),
@@ -84,13 +84,14 @@ class _MesaFormularioState extends State<MesaFormulario> {
                         }
 
                         // Salvar ou atualizar a mesa
-                        if (widget.mesa == null || widget.mesa!.id == null) {
+                        if (widget.mesa == null ||
+                            widget.mesa!.mesaId == null) {
                           // Lógica para cadastrar nova mesa
                           print("Cadastrar nova mesa: $descricao");
                         } else {
                           // Lógica para atualizar mesa existente
                           print(
-                              "Atualizar mesa ${widget.mesa!.id}: $descricao");
+                              "Atualizar mesa ${widget.mesa!.mesaId}: $descricao");
                         }
 
                         Navigator.pop(context);

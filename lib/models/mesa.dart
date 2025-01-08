@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:takasukonomuro/models/enums/status.dart';
 
 class Mesa {
-  int? id;
+  int? mesaId;
   String descricao;
   Status status;
 
   Mesa({
-    this.id,
+    this.mesaId,
     required this.descricao,
     required this.status,
   });

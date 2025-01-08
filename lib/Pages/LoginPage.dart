@@ -226,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: (context) => GerentePage()));
                                 } else if (funcionario.login == 3) {
                                   var mesa = Mesa(
-                                      id: 1,
+                                      mesaId: 1,
                                       descricao: "descricao",
                                       status: Status.Livre);
                                   Navigator.push(
