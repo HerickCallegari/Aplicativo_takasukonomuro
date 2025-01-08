@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/business/repositories/FuncionarioRepository.dart';
-import 'package:takasukonomuro/pages/GerentePage.dart';
-import 'package:takasukonomuro/pages/MesasPage.dart';
-import 'package:takasukonomuro/models/Enums/Cargo.dart';
-import 'package:takasukonomuro/models/Funcionario.dart';
+import 'package:takasukonomuro/business/repositories/funcionarioRepository.dart';
+import 'package:takasukonomuro/models/enums/status.dart';
+import 'package:takasukonomuro/models/mesa.dart';
+import 'package:takasukonomuro/pages/gerentePage.dart';
+import 'package:takasukonomuro/pages/mesaFormulario.dart';
+import 'package:takasukonomuro/pages/mesasPage.dart';
+import 'package:takasukonomuro/models/enums/cargo.dart';
+import 'package:takasukonomuro/models/funcionario.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -168,6 +171,12 @@ class _LoginPageState extends State<LoginPage> {
                                       cpf: "61871125",
                                       nome: "herick",
                                       senha: "123",
+                                      cargo: Cargo.Garcom),
+                                  Funcionario(
+                                      login: 3,
+                                      cpf: "7147894",
+                                      nome: "Matheus",
+                                      senha: "123",
                                       cargo: Cargo.Garcom)
                                 ];
 
@@ -215,6 +224,17 @@ class _LoginPageState extends State<LoginPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GerentePage()));
+                                } else if (funcionario.login == 3) {
+                                  var mesa = Mesa(
+                                      id: 1,
+                                      descricao: "descricao",
+                                      status: Status.Livre);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MesaFormulario(
+                                              /*mesa: mesa,*/
+                                              )));
                                 } else if (funcionario.cargo == Cargo.Garcom) {
                                   Navigator.push(
                                       context,

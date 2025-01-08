@@ -1,4 +1,4 @@
-import 'package:takasukonomuro/models/Funcionario.dart';
+import 'package:takasukonomuro/models/funcionario.dart';
 
 abstract class IFuncionarioRepository {
   Future<void> add(Funcionario funcionario);

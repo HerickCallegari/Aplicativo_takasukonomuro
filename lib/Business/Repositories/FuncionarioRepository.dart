@@ -1,15 +1,13 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'package:takasukonomuro/business/repositories/interfaces/IFuncionarioRepository.dart';
+import 'package:takasukonomuro/business/repositories/interfaces/iFuncionarioRepository.dart';
 import 'package:takasukonomuro/main.dart';
-import 'package:takasukonomuro/models/Enums/Cargo.dart';
-import 'package:takasukonomuro/models/Funcionario.dart';
+import 'package:takasukonomuro/models/enums/cargo.dart';
+import 'package:takasukonomuro/models/funcionario.dart';
 
 class FuncionarioRepository implements IFuncionarioRepository {
   @override
   Future<void> add(Funcionario funcionario) async {
-    if (funcionario == null) throw Exception("Funcionario não pode ser null");
-
     try {
       await supabase.from('Funcionarios').insert([
         {

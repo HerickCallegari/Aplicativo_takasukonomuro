@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/models/Enums/Cargo.dart';
+import 'package:takasukonomuro/models/enums/cargo.dart';
 
 class Funcionario {
   int? login;

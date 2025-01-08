@@ -12,7 +12,7 @@ class _MesasPageState extends State<MesasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ElevatedButton(
-          onPressed: () => Navigator.pop(context), child: Text("Voltar")),
+          onPressed: () => Navigator.pop(context), child: const Text("Voltar")),
     );
   }
 }
