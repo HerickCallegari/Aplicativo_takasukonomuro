@@ -188,14 +188,15 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                   return;
                                 }
-                                /* 
+
+                                /*
                                 // caso queira mostrar a API
                                 FuncionarioRepository repository =
                                     FuncionarioRepository();
                                 Funcionario? funcionario =
                                     await repository.findBy(login);
-
                                 */
+
                                 // Para evitar usar a API e gastar tokens
                                 Funcionario? funcionario = funcionarios
                                     .firstWhere((f) => f.login == loginInt,

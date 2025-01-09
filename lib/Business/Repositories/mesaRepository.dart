@@ -1,8 +1,8 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'package:takasukonomuro/business/repositories/interfaces/IMesaRepository.dart';
+import 'package:takasukonomuro/business/repositories/interfaces/iMesaRepository.dart';
 import 'package:takasukonomuro/main.dart';
-import 'package:takasukonomuro/models/Mesa.dart';
+import 'package:takasukonomuro/models/mesa.dart';
 import 'package:takasukonomuro/models/enums/status.dart';
 
 class MesaRepository implements IMesaRepository {
@@ -100,6 +100,12 @@ class MesaRepository implements IMesaRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> remove(Mesa mesa) {
+    // TODO: implement remove
+    throw UnimplementedError();
   }
 
   Status _getStatus(Map data) {

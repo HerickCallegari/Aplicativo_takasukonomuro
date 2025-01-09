@@ -116,4 +116,10 @@ class FuncionarioRepository implements IFuncionarioRepository {
       throw Exception("Funcionario sem cargo");
     return cargo;
   }
+
+  @override
+  Future<void> remove(Funcionario funcionario) {
+    // TODO: implement remove
+    throw UnimplementedError();
+  }
 }
