@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/business/repositories/funcionarioRepository.dart';
-import 'package:takasukonomuro/models/enums/status.dart';
-import 'package:takasukonomuro/models/mesa.dart';
+import 'package:takasukonomuro/business/repositories/comandaRepository.dart';
+import 'package:takasukonomuro/business/repositories/subComandaRepository.dart';
+import 'package:takasukonomuro/business/repositories/transacaoRepository.dart';
+import 'package:takasukonomuro/models/comanda.dart';
+import 'package:takasukonomuro/models/enums/tipoTransacao.dart';
+import 'package:takasukonomuro/models/subComanda.dart';
+import 'package:takasukonomuro/models/transacao.dart';
 import 'package:takasukonomuro/pages/gerentePage.dart';
-import 'package:takasukonomuro/pages/mesaFormulario.dart';
-import 'package:takasukonomuro/pages/mesasPage.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
 
@@ -177,6 +179,12 @@ class _LoginPageState extends State<LoginPage> {
                                       cpf: "7147894",
                                       nome: "Matheus",
                                       senha: "123",
+                                      cargo: Cargo.Garcom),
+                                  Funcionario(
+                                      login: 999,
+                                      cpf: "teste",
+                                      nome: "teste",
+                                      senha: "123",
                                       cargo: Cargo.Garcom)
                                 ];
 
@@ -225,22 +233,20 @@ class _LoginPageState extends State<LoginPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GerentePage()));
-                                } else if (funcionario.login == 3) {
-                                  var mesa = Mesa(
+                                } else if (funcionario.login == 999) {
+                                  // Bloco de teste de codigo
+                                  ComandaRepository comandaRepository =
+                                      ComandaRepository();
+                                  SubComandaRepository subComandaRepository =
+                                      SubComandaRepository();
+                                  Comanda comanda = Comanda(
                                       mesaId: 1,
-                                      descricao: "descricao",
-                                      status: Status.Livre);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MesaFormulario(
-                                              /*mesa: mesa,*/
-                                              )));
-                                } else if (funcionario.cargo == Cargo.Garcom) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MesasPage()));
+                                      funcionarioId: 1,
+                                      data: DateTime.now(),
+                                      horarioAbertura: DateTime.now(),
+                                      valorTotal: 0,
+                                      pago: false);
+                                  comandaRepository.add(comanda);
                                 }
                               }
                             },

@@ -15,7 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
-  intl: ^0.17.0
+  intl: ^0.18.0
   provider: ^5.0.0
   supabase_flutter: ^2.8.0
   cupertino_icons: ^1.0.8

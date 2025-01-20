@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/business/repositories/categoriaRepository.dart';
 import 'package:takasukonomuro/pages/homePage.dart';
 
 class MyApp extends StatelessWidget {

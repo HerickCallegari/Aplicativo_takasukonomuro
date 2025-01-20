@@ -7,7 +7,7 @@ class Comanda {
   DateTime data = DateTime.now();
   DateTime horarioAbertura = DateTime.now();
   DateTime? horarioFechamento;
-  Float valorTotal;
+  double valorTotal;
   bool pago = false;
 
   Comanda(

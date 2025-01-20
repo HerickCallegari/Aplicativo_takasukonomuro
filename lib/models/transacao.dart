@@ -6,7 +6,7 @@ class Transacao {
   int? transacaoId;
   int comandaId;
   Tipotransacao tipoTransacao;
-  Float valor;
+  double valor;
   DateTime data;
 
   Transacao(

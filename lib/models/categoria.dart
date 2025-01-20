@@ -1,6 +1,6 @@
 class Categoria {
-  int? categiruaId;
+  int? categoriaId;
   String descricao;
 
-  Categoria({this.categiruaId, required this.descricao});
+  Categoria({this.categoriaId, required this.descricao});
 }

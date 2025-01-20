@@ -12,8 +12,8 @@ class MesaRepository implements IMesaRepository {
       await supabase.from('Mesas').insert([
         {
           // 'Login' será auto incremental no banco de dados
-          'descricao': mesa.descricao,
-          'status': mesa.getStatus()
+          'Descricao': mesa.descricao,
+          'Status': mesa.getStatus()
         }
       ]);
     } catch (e) {
@@ -30,8 +30,8 @@ class MesaRepository implements IMesaRepository {
       for (var response in responseList) {
         if (response != null && response is Map<String, dynamic>) {
           Mesa mesa = Mesa(
-            mesaId: response['id'],
-            descricao: response['descricao'],
+            mesaId: response['MesaId'],
+            descricao: response['Descricao'],
             status: _getStatus(response),
           );
 
@@ -49,18 +49,17 @@ class MesaRepository implements IMesaRepository {
   Future<Mesa?> findBy(id) async {
     try {
       var response =
-          await supabase.from('Mesas').select('*').eq('id', id).single();
+          await supabase.from('Mesas').select('*').eq('MesaId', id).single();
 
       // ignore: unnecessary_type_check
       if (response != null && response is Map<String, dynamic>) {
         Mesa mesa = Mesa(
-            mesaId: response['id'],
-            descricao: response['descricao'],
+            mesaId: response['MesaId'],
+            descricao: response['Descricao'],
             status: _getStatus(response));
         return mesa;
       } else {
-        print("Dados do funcionário não encontrados.");
-        return null;
+        throw Exception("Dados do funcionário não encontrados.");
       }
     } catch (e) {
       rethrow;
@@ -74,8 +73,8 @@ class MesaRepository implements IMesaRepository {
     try {
       await supabase
           .from('Mesas')
-          .update({'descricao': mesa.descricao, 'status': mesa.getStatus()}).eq(
-              'id', mesa.mesaId.toString());
+          .update({'Descricao': mesa.descricao, 'Status': mesa.getStatus()}).eq(
+              'MesaId', mesa.mesaId.toString());
     } catch (e) {
       rethrow;
     }
@@ -88,14 +87,13 @@ class MesaRepository implements IMesaRepository {
     try {
       if (data != null && data is Map<String, dynamic>) {
         Mesa mesa = Mesa(
-          mesaId: response['id'],
-          descricao: response['descricao'],
+          mesaId: response['MesaId'],
+          descricao: response['Descricao'],
           status: _getStatus(response),
         );
         return mesa;
       } else {
-        print("Dados do funcionário não encontrados.");
-        return null;
+        throw Exception("Dados do Funcionario nao encontrados");
       }
     } catch (e) {
       rethrow;
@@ -103,21 +101,31 @@ class MesaRepository implements IMesaRepository {
   }
 
   @override
-  Future<void> remove(Mesa mesa) {
-    // TODO: implement remove
-    throw UnimplementedError();
+  Future<void> remove(Mesa mesa) async {
+    try {
+      await supabase
+          .from('Mesas')
+          .delete()
+          .eq('MesaId', mesa.mesaId.toString());
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Status _getStatus(Map data) {
-    Status status;
-    if (data['status'] == 'Livre') {
-      status = Status.Livre;
-    } else if (data['status'] == 'Reservado') {
-      status = Status.Reservado;
-    } else if (data['status'] == 'Ocupado') {
-      status = Status.Ocupado;
-    } else
-      throw Exception("Mesa sem cargo");
-    return status;
+    try {
+      Status status;
+      if (data['Status'] == 'Livre') {
+        status = Status.Livre;
+      } else if (data['Status'] == 'Reservado') {
+        status = Status.Reservado;
+      } else if (data['Status'] == 'Ocupado') {
+        status = Status.Ocupado;
+      } else
+        throw Exception("Mesa sem cargo");
+      return status;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -4,11 +4,13 @@ class Item {
   int? itemId;
   int categoriaId;
   String descricao;
-  Float preco;
+  double preco;
+  int estoque;
 
   Item(
       {this.itemId,
       required this.categoriaId,
       required this.descricao,
-      required this.preco});
+      required this.preco,
+      required this.estoque});
 }

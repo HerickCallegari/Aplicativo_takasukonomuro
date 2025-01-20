@@ -19,42 +19,55 @@ class FuncionarioRepository implements IFuncionarioRepository {
         }
       ]);
     } catch (e) {
-      print("Nao foi possivel inserir o funcionario");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> remove(Funcionario funcionario) async {
+    try {
+      int id = funcionario.login!;
+      await supabase.from('Funcionarios').delete().eq('Login', id);
+    } catch (e) {
+      rethrow;
     }
   }
 
   @override
   Future<List<Funcionario>> findAll() async {
-    var responseList = await supabase.from("Funcionarios").select('*');
-    List<Funcionario> funcionarios = [];
+    try {
+      var responseList = await supabase.from("Funcionarios").select('*');
+      List<Funcionario> funcionarios = [];
 
-    for (var response in responseList) {
-      if (response != null && response is Map<String, dynamic>) {
-        Funcionario funcionario = Funcionario(
-          cpf: response['CPF'],
-          nome: response['Nome'],
-          senha: response['Senha'],
-          cargo: _getCargo(response),
-          login: response['Login'],
-        );
+      for (var response in responseList) {
+        if (response != null && response is Map<String, dynamic>) {
+          Funcionario funcionario = Funcionario(
+            cpf: response['CPF'],
+            nome: response['Nome'],
+            senha: response['Senha'],
+            cargo: _getCargo(response),
+            login: response['Login'],
+          );
 
-        funcionarios.add(funcionario);
+          funcionarios.add(funcionario);
+        }
       }
-    }
 
-    return funcionarios;
+      return funcionarios;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
   Future<Funcionario?> findBy(id) async {
-    var response = await supabase
-        .from('Funcionarios')
-        .select('CPF, Nome, Login, Senha, Cargo')
-        .eq('Login', id)
-        .single();
+    try {
+      var response = await supabase
+          .from('Funcionarios')
+          .select('CPF, Nome, Login, Senha, Cargo')
+          .eq('Login', id)
+          .single();
 
-    // ignore: unnecessary_type_check
-    if (response != null && response is Map<String, dynamic>) {
       Funcionario funcionario = Funcionario(
         cpf: response['CPF'],
         nome: response['Nome'],
@@ -63,9 +76,8 @@ class FuncionarioRepository implements IFuncionarioRepository {
         login: response['Login'],
       );
       return funcionario;
-    } else {
-      print("Dados do funcionário não encontrados.");
-      return null;
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -81,7 +93,7 @@ class FuncionarioRepository implements IFuncionarioRepository {
         'Cargo': funcionario.getCargo(),
       }).eq('Login', funcionario.login.toString());
     } catch (e) {
-      print("Nao foi possivel inserir o funcionario");
+      rethrow;
     }
   }
 
@@ -115,11 +127,5 @@ class FuncionarioRepository implements IFuncionarioRepository {
     } else
       throw Exception("Funcionario sem cargo");
     return cargo;
-  }
-
-  @override
-  Future<void> remove(Funcionario funcionario) {
-    // TODO: implement remove
-    throw UnimplementedError();
   }
 }
