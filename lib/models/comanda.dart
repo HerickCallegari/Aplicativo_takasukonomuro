@@ -19,4 +19,9 @@ class Comanda {
       this.horarioFechamento,
       required this.valorTotal,
       required this.pago});
+
+  @override
+  String toString() {
+    return "Comanda: " + comandaId.toString();
+  }
 }

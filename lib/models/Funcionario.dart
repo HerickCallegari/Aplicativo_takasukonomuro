@@ -6,11 +6,11 @@ class Funcionario {
   String nome;
   String senha;
   Cargo cargo;
-  String? cpf;
+  String cpf;
 
   Funcionario({
     this.login,
-    this.cpf,
+    required this.cpf,
     required this.nome,
     required this.senha,
     required this.cargo,

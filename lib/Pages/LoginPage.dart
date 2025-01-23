@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/business/repositories/comandaRepository.dart';
+import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
+import 'package:takasukonomuro/business/repositories/categoriaRepository.dart';
+import 'package:takasukonomuro/business/repositories/funcionarioRepository.dart';
+import 'package:takasukonomuro/business/repositories/itemRepository.dart';
+import 'package:takasukonomuro/business/repositories/mesaRepository.dart';
 import 'package:takasukonomuro/business/repositories/subComandaRepository.dart';
 import 'package:takasukonomuro/business/repositories/transacaoRepository.dart';
-import 'package:takasukonomuro/models/comanda.dart';
+import 'package:takasukonomuro/models/categoria.dart';
+import 'package:takasukonomuro/models/enums/status.dart';
 import 'package:takasukonomuro/models/enums/tipoTransacao.dart';
+import 'package:takasukonomuro/models/item.dart';
+import 'package:takasukonomuro/models/itemSubComanda.dart';
+import 'package:takasukonomuro/models/mesa.dart';
 import 'package:takasukonomuro/models/subComanda.dart';
 import 'package:takasukonomuro/models/transacao.dart';
 import 'package:takasukonomuro/pages/gerentePage.dart';
@@ -235,18 +243,12 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: (context) => GerentePage()));
                                 } else if (funcionario.login == 999) {
                                   // Bloco de teste de codigo
-                                  ComandaRepository comandaRepository =
-                                      ComandaRepository();
-                                  SubComandaRepository subComandaRepository =
-                                      SubComandaRepository();
-                                  Comanda comanda = Comanda(
-                                      mesaId: 1,
-                                      funcionarioId: 1,
-                                      data: DateTime.now(),
-                                      horarioAbertura: DateTime.now(),
-                                      valorTotal: 0,
-                                      pago: false);
-                                  comandaRepository.add(comanda);
+                                  ItemSubComandaRepository
+                                      itemSubComandaRepository =
+                                      ItemSubComandaRepository();
+                                  List<ItemSubComanda> itemSubComanda =
+                                      await itemSubComandaRepository.findAll();
+                                  print(itemSubComanda.length);
                                 }
                               }
                             },

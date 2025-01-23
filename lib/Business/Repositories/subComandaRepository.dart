@@ -29,11 +29,16 @@ class SubComandaRepository implements ISubComandaRepository {
       for (var response in responseList) {
         if (response != null && response is Map<String, dynamic>) {
           SubComanda subcomanda = SubComanda(
-              subComandaId: response['SubComandaId'],
+              subComandaId: response['SubComandaid'],
               comandaId: response['ComandaId'],
-              valorTotal: response['ValorTotal'],
-              quantidadeProdutos: response['QuantidadeProdutos'],
-              dataLancamento: response['DataLancamento']);
+              valorTotal: response['ValorTotal'] is double
+                  ? response['ValorTotal']
+                  : double.parse(response['ValorTotal'].toString()),
+              quantidadeProdutos: response['QuantidadeProdutos'] is int
+                  ? response['QuantidadeProdutos']
+                  : int.parse(response['QuantidadeProdutos'].toString()),
+              dataLancamento:
+                  DateTime.parse(response['DataLancamento'].toString()));
 
           SubComandas.add(subcomanda);
         }
@@ -51,17 +56,22 @@ class SubComandaRepository implements ISubComandaRepository {
       var response = await supabase
           .from('SubComandas')
           .select('*')
-          .eq('SubComandaId', id)
+          .eq('SubComandaid', id)
           .single();
 
       // ignore: unnecessary_type_check
       if (response != null && response is Map<String, dynamic>) {
         SubComanda subcomanda = SubComanda(
-            subComandaId: response['SubComandaId'],
+            subComandaId: response['SubComandaid'],
             comandaId: response['ComandaId'],
-            valorTotal: response['ValorTotal'],
-            quantidadeProdutos: response['QuantidadeProdutos'],
-            dataLancamento: response['DataLancamento']);
+            valorTotal: response['ValorTotal'] is double
+                ? response['ValorTotal']
+                : double.parse(response['ValorTotal'].toString()),
+            quantidadeProdutos: response['QuantidadeProdutos'] is int
+                ? response['QuantidadeProdutos']
+                : int.parse(response['QuantidadeProdutos'].toString()),
+            dataLancamento:
+                DateTime.parse(response['DataLancamento'].toString()));
         return subcomanda;
       } else {
         throw Exception("Dados do funcionário não encontrados.");
@@ -80,7 +90,7 @@ class SubComandaRepository implements ISubComandaRepository {
         'ValorTotal': subComanda.valorTotal,
         'QuantidadeProdutos': subComanda.quantidadeProdutos,
         'DataLancamento': subComanda.dataLancamento.toIso8601String()
-      }).eq('SubComandaId', subComanda.subComandaId.toString());
+      }).eq('SubComandaid', subComanda.subComandaId.toString());
     } catch (e) {
       rethrow;
     }
@@ -92,7 +102,7 @@ class SubComandaRepository implements ISubComandaRepository {
       await supabase
           .from('SubComandas')
           .delete()
-          .eq('SubComandaId', subcomanda.subComandaId.toString());
+          .eq('SubComandaid', subcomanda.subComandaId.toString());
     } catch (e) {
       rethrow;
     }

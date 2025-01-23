@@ -23,7 +23,7 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
   @override
   Future<List<ItemSubComanda>> findAll() async {
     try {
-      var responseList = await supabase.from("ItemSubComanda").select('*');
+      var responseList = await supabase.from("ItemSubComandas").select('*');
       List<ItemSubComanda> ItemSubComandas = [];
 
       for (var response in responseList) {
@@ -31,8 +31,12 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
           ItemSubComanda itemsubcomanda = ItemSubComanda(
               itemSubComandaId: response['ItemSubComandaId'],
               subComandaId: response['SubComandaId'],
-              valorTotal: response['ValorTotal'],
-              quantidadeProdutos: response['QuantidadeProdutos'],
+              valorTotal: response['ValorTotal'] is double
+                  ? response['ValorTotal']
+                  : double.parse(response['ValorTotal'].toString()),
+              quantidadeProdutos: response['QuantidadeProdutos'] is int
+                  ? response['QuantidadeProdutos']
+                  : int.parse(response['QuantidadeProdutos'].toString()),
               itemId: response['ItemId']);
 
           ItemSubComandas.add(itemsubcomanda);
@@ -59,8 +63,12 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
         ItemSubComanda itemsubcomanda = ItemSubComanda(
             itemSubComandaId: response['ItemSubComandaId'],
             subComandaId: response['SubComandaId'],
-            valorTotal: response['ValorTotal'],
-            quantidadeProdutos: response['QuantidadeProdutos'],
+            valorTotal: response['ValorTotal'] is double
+                ? response['ValorTotal']
+                : double.parse(response['ValorTotal'].toString()),
+            quantidadeProdutos: response['QuantidadeProdutos'] is int
+                ? response['QuantidadeProdutos']
+                : int.parse(response['QuantidadeProdutos'].toString()),
             itemId: response['ItemId']);
         return itemsubcomanda;
       } else {

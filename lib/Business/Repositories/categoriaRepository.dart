@@ -23,7 +23,7 @@ class CategoriaRepository implements ICategoriaRepository {
   Future<List<Categoria>> findAll() async {
     try {
       var responseList = await supabase.from("Categorias").select('*');
-      List<Categoria> Categorias = [];
+      List<Categoria> categorias = [];
 
       for (var response in responseList) {
         if (response != null && response is Map<String, dynamic>) {
@@ -31,11 +31,11 @@ class CategoriaRepository implements ICategoriaRepository {
               categoriaId: response['CategoriaId'],
               descricao: response['Descricao']);
 
-          Categorias.add(categoria);
+          categorias.add(categoria);
         }
       }
 
-      return Categorias;
+      return categorias;
     } catch (e) {
       rethrow;
     }
@@ -73,25 +73,6 @@ class CategoriaRepository implements ICategoriaRepository {
       await supabase.from('Categorias').update({
         'Descricao': categoria.descricao,
       }).eq('CategoriaId', categoria.categoriaId.toString());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Categoria?> testFetchCategoria() async {
-    var response = await supabase.from('Categorias').select().limit(1).single();
-
-    var data = response as Map;
-    try {
-      if (data != null && data is Map<String, dynamic>) {
-        Categoria categoria = Categoria(
-          categoriaId: response['CategoriaId'],
-          descricao: response['Descricao'],
-        );
-        return categoria;
-      } else {
-        throw Exception("Dados do Funcionario nao encontrados");
-      }
     } catch (e) {
       rethrow;
     }

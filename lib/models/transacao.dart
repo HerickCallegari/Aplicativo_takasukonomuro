@@ -15,4 +15,18 @@ class Transacao {
       required this.tipoTransacao,
       required this.valor,
       required this.data});
+
+  String getTipoTransacao() {
+    if (tipoTransacao == Tipotransacao.Credito) {
+      return "Credito";
+    } else if (tipoTransacao == Tipotransacao.Debito) {
+      return 'Debito';
+    } else if (tipoTransacao == Tipotransacao.Dinheiro) {
+      return 'Dinheiro';
+    } else if (tipoTransacao == Tipotransacao.Pix) {
+      return 'Pix';
+    } else {
+      return "Outro";
+    }
+  }
 }

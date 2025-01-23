@@ -33,15 +33,26 @@ class ComandaRepository implements IComandaRepository {
       for (var response in responseList) {
         if (response != null && response is Map<String, dynamic>) {
           Comanda comanda = Comanda(
-              comandaId: response['ComandaId'],
-              mesaId: response['MesaId'],
-              funcionarioId: response['FuncionarioId'],
-              data: response['Data'],
-              horarioAbertura: response['HorarioAbertura'],
-              horarioFechamento: response['HorarioFechamento'],
-              valorTotal: response['ValorTotal'],
+              comandaId: response['ComandaId'] is int
+                  ? response['ComandaId']
+                  : int.parse(response['ComandaId']),
+              mesaId: response['MesaId'] is int
+                  ? response['MesaId']
+                  : int.parse(response['MesaId']),
+              funcionarioId: response['FuncionarioId'] is int
+                  ? response['FuncionarioId']
+                  : int.parse(response['FuncionarioId']),
+              data: DateTime.parse(response['Data']),
+              horarioAbertura: DateTime.parse(response['HorarioAbertura']),
+              valorTotal: response['ValorTotal'] is double
+                  ? response['ValorTotal']
+                  : double.parse(response['ValorTotal'].toString()),
               pago: response['Pago']);
-
+          if (response['HorarioFechamento'] != null &&
+              response['HorarioFechamento'] != '') {
+            comanda.horarioFechamento =
+                DateTime.parse(response['HorarioFechamento']);
+          }
           Comandas.add(comanda);
         }
       }
@@ -64,14 +75,26 @@ class ComandaRepository implements IComandaRepository {
       // ignore: unnecessary_type_check
       if (response != null && response is Map<String, dynamic>) {
         Comanda comanda = Comanda(
-            comandaId: response['ComandaId'],
-            mesaId: response['MesaId'],
-            funcionarioId: response['FuncionarioId'],
-            data: response['Data'],
-            horarioAbertura: response['HorarioAbertura'],
-            horarioFechamento: response['HorarioFechamento'],
-            valorTotal: response['ValorTotal'],
+            comandaId: response['ComandaId'] is int
+                ? response['ComandaId']
+                : int.parse(response['ComandaId']),
+            mesaId: response['MesaId'] is int
+                ? response['MesaId']
+                : int.parse(response['MesaId']),
+            funcionarioId: response['FuncionarioId'] is int
+                ? response['FuncionarioId']
+                : int.parse(response['FuncionarioId']),
+            data: DateTime.parse(response['Data']),
+            horarioAbertura: DateTime.parse(response['HorarioAbertura']),
+            valorTotal: response['ValorTotal'] is double
+                ? response['ValorTotal']
+                : double.parse(response['ValorTotal'].toString()),
             pago: response['Pago']);
+        if (response['HorarioFechamento'] != null &&
+            response['HorarioFechamento'] != '') {
+          comanda.horarioFechamento =
+              DateTime.parse(response['HorarioFechamento']);
+        }
         return comanda;
       } else {
         throw Exception("Dados do funcionário não encontrados.");

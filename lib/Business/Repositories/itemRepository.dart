@@ -34,7 +34,9 @@ class ItemRepository implements IItemRepository {
               itemId: response['ItemId'],
               descricao: response['Descricao'],
               estoque: response['Estoque'],
-              preco: response['Preco'],
+              preco: response['Preco'] is double
+                  ? response['Preco']
+                  : double.parse(response['Preco'].toString()),
               categoriaId: response['CategoriaId']);
 
           Items.add(item);
@@ -51,7 +53,7 @@ class ItemRepository implements IItemRepository {
   Future<Item?> findBy(id) async {
     try {
       var response =
-          await supabase.from('Items').select('*').eq('id', id).single();
+          await supabase.from('Items').select('*').eq('ItemId', id).single();
 
       // ignore: unnecessary_type_check
       if (response != null && response is Map<String, dynamic>) {
@@ -59,7 +61,9 @@ class ItemRepository implements IItemRepository {
             itemId: response['ItemId'],
             descricao: response['Descricao'],
             estoque: response['Estoque'],
-            preco: response['Preco'],
+            preco: response['Preco'] is double
+                ? response['Preco']
+                : double.parse(response['Preco'].toString()),
             categoriaId: response['CategoriaId']);
 
         return item;
