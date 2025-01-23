@@ -8,6 +8,7 @@ class Comanda {
   DateTime horarioAbertura = DateTime.now();
   DateTime? horarioFechamento;
   double valorTotal;
+  int quantidadePessoas;
   bool pago = false;
 
   Comanda(
@@ -15,6 +16,7 @@ class Comanda {
       required this.mesaId,
       required this.funcionarioId,
       required this.data,
+      required this.quantidadePessoas,
       required this.horarioAbertura,
       this.horarioFechamento,
       required this.valorTotal,

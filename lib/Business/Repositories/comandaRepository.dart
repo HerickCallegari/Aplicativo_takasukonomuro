@@ -16,7 +16,8 @@ class ComandaRepository implements IComandaRepository {
           'Data': comanda.data.toIso8601String(),
           'HorarioAbertura': comanda.horarioAbertura.toIso8601String(),
           'ValorTotal': comanda.valorTotal,
-          'Pago': comanda.pago
+          'Pago': comanda.pago,
+          'QuantidadePessoas': comanda.quantidadePessoas
         }
       ]);
     } catch (e) {
@@ -47,7 +48,10 @@ class ComandaRepository implements IComandaRepository {
               valorTotal: response['ValorTotal'] is double
                   ? response['ValorTotal']
                   : double.parse(response['ValorTotal'].toString()),
-              pago: response['Pago']);
+              pago: response['Pago'],
+              quantidadePessoas: response['QuantidadePessoas'] is int
+                  ? response['QuantidadePessoas']
+                  : int.parse(response['QuantidadePessoas'].toString()));
           if (response['HorarioFechamento'] != null &&
               response['HorarioFechamento'] != '') {
             comanda.horarioFechamento =
@@ -89,7 +93,10 @@ class ComandaRepository implements IComandaRepository {
             valorTotal: response['ValorTotal'] is double
                 ? response['ValorTotal']
                 : double.parse(response['ValorTotal'].toString()),
-            pago: response['Pago']);
+            pago: response['Pago'],
+            quantidadePessoas: response['QuantidadePessoas'] is int
+                ? response['QuantidadePessoas']
+                : int.parse(response['QuantidadePessoas'].toString()));
         if (response['HorarioFechamento'] != null &&
             response['HorarioFechamento'] != '') {
           comanda.horarioFechamento =
@@ -116,7 +123,8 @@ class ComandaRepository implements IComandaRepository {
         'HorarioAbertura': comanda.horarioAbertura.toIso8601String(),
         'HorarioFechamento': comanda.horarioFechamento?.toIso8601String(),
         'ValorTotal': comanda.valorTotal,
-        'Pago': comanda.pago
+        'Pago': comanda.pago,
+        'QuantidadePessoas': comanda.quantidadePessoas
       }).eq('ComandaId', comanda.comandaId.toString());
     } catch (e) {
       rethrow;
