@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
-import 'package:takasukonomuro/business/repositories/categoriaRepository.dart';
-import 'package:takasukonomuro/business/repositories/funcionarioRepository.dart';
-import 'package:takasukonomuro/business/repositories/itemRepository.dart';
-import 'package:takasukonomuro/business/repositories/mesaRepository.dart';
-import 'package:takasukonomuro/business/repositories/subComandaRepository.dart';
-import 'package:takasukonomuro/business/repositories/transacaoRepository.dart';
-import 'package:takasukonomuro/models/categoria.dart';
-import 'package:takasukonomuro/models/enums/status.dart';
-import 'package:takasukonomuro/models/enums/tipoTransacao.dart';
-import 'package:takasukonomuro/models/item.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
-import 'package:takasukonomuro/models/mesa.dart';
-import 'package:takasukonomuro/models/subComanda.dart';
-import 'package:takasukonomuro/models/transacao.dart';
 import 'package:takasukonomuro/pages/gerentePage.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
@@ -246,9 +233,14 @@ class _LoginPageState extends State<LoginPage> {
                                   ItemSubComandaRepository
                                       itemSubComandaRepository =
                                       ItemSubComandaRepository();
-                                  List<ItemSubComanda> itemSubComanda =
-                                      await itemSubComandaRepository.findAll();
-                                  print(itemSubComanda.length);
+                                  ItemSubComanda itemSubComanda =
+                                      ItemSubComanda(
+                                          //itemSubComandaId: 13,
+                                          subComandaId: 3,
+                                          itemId: 4,
+                                          quantidadeProdutos: 1,
+                                          valorTotal: 0);
+                                  itemSubComandaRepository.add(itemSubComanda);
                                 }
                               }
                             },
