@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/Pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
 import 'package:takasukonomuro/pages/gerentePage.dart';
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                   return;
                                 }
-
+                                // alterar para service no Final
                                 /*
                                 // caso queira mostrar a API
                                 FuncionarioRepository repository =
@@ -228,25 +229,27 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   errorMessage = null;
                                 });
-
-                                if (funcionario.cargo == Cargo.Gerente) {
+                                if (funcionario.login == 999)
+                                {
+                                  // bloco de código para teste de funcionalidade
+                                   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GarcomPage()));
+                                }
+                                else if (funcionario.cargo == Cargo.Gerente) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GerentePage()));
-                                } else if (funcionario.login == 999) {
-                                  // Bloco de teste de codigo
-                                  ItemSubComandaRepository
-                                      itemSubComandaRepository =
-                                      ItemSubComandaRepository();
-                                  ItemSubComanda itemSubComanda =
-                                      ItemSubComanda(
-                                          //itemSubComandaId: 13,
-                                          subComandaId: 3,
-                                          itemId: 4,
-                                          quantidadeProdutos: 1,
-                                          valorTotal: 0);
-                                  itemSubComandaRepository.add(itemSubComanda);
+
+                                } 
+                                else if (funcionario.cargo == Cargo.Garcom)
+                                {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GarcomPage()));
                                 }
                               }
                             },
