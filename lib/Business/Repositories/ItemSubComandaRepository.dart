@@ -6,10 +6,9 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
   @override
   Future<void> add(ItemSubComanda itemSubComanda) async {
     try {
-      await supabase.from('ItemSubComanda').insert([
+      await supabase.from('ItemSubComandas').insert([
         {
-          // 'Login' será auto incremental no banco de dados
-          'SubComandaId': itemSubComanda.subComandaId,
+          'SubComandaid': itemSubComanda.subComandaId,
           'ValorTotal': itemSubComanda.valorTotal,
           'QuantidadeProdutos': itemSubComanda.quantidadeProdutos,
           'ItemId': itemSubComanda.itemId
@@ -30,7 +29,7 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
         if (response != null && response is Map<String, dynamic>) {
           ItemSubComanda itemsubcomanda = ItemSubComanda(
               itemSubComandaId: response['ItemSubComandaId'],
-              subComandaId: response['SubComandaId'],
+              subComandaId: response['SubComandaid'],
               valorTotal: response['ValorTotal'] is double
                   ? response['ValorTotal']
                   : double.parse(response['ValorTotal'].toString()),
@@ -62,7 +61,7 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
       if (response != null && response is Map<String, dynamic>) {
         ItemSubComanda itemsubcomanda = ItemSubComanda(
             itemSubComandaId: response['ItemSubComandaId'],
-            subComandaId: response['SubComandaId'],
+            subComandaId: response['SubComandaid'],
             valorTotal: response['ValorTotal'] is double
                 ? response['ValorTotal']
                 : double.parse(response['ValorTotal'].toString()),
@@ -87,7 +86,7 @@ class ItemSubComandaRepository implements IItemSubComandaRepository {
 
     try {
       await supabase.from('ItemSubComandas').update({
-        'SubComandaId': itemSubComanda.subComandaId,
+        'SubComandaid': itemSubComanda.subComandaId,
         'ValorTotal': itemSubComanda.valorTotal,
         'QuantidadeProdutos': itemSubComanda.quantidadeProdutos,
         'ItemId': itemSubComanda.itemId
