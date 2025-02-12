@@ -176,6 +176,12 @@ class _LoginPageState extends State<LoginPage> {
                                       nome: "kiria",
                                       senha: "123",
                                       cargo: Cargo.Gerente),
+                                   Funcionario(
+                                      login: 5,
+                                      cpf: "1314815",
+                                      nome: "baby",
+                                      senha: "123",
+                                      cargo: Cargo.Gerente),
                                   Funcionario(
                                       login: 1,
                                       cpf: "61871125",

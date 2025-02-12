@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "Aplicativo_takasukonomuro (Flutter Pixel 6 API 30)",
+            "program": "lib/main.dart",
+            "deviceId": "emulator-5554",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
