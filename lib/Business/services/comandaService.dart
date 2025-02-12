@@ -29,7 +29,7 @@ class Comandaservice implements IComandaRepository {
   Future<List<Comanda>> findAll() async {
     List<Comanda>? lista;
     try {
-      List<Comanda> lista = await repository.findAll();
+      lista = await repository.findAll();
     } catch (e) {
       rethrow;
     }
@@ -41,18 +41,51 @@ class Comandaservice implements IComandaRepository {
 
   @override
   Future<Comanda?> findBy(String id) {
-    return repository.findBy(id);
+    try {
+      return repository.findBy(id);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> remove(Comanda comanda) {
-    // TODO: implement remove
-    throw UnimplementedError();
+  Future<void> remove(Comanda comanda) async {
+    if (comanda.comandaId == null) {
+      throw Exception("Comanda não encontrada");
+    }
+    try {
+      repository.remove(comanda);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> update(Comanda comanda) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<void> update(Comanda comanda) async {
+    if (comanda.pago == null) {
+      throw Exception("Sem informação sobre o pagamento.");
+    } else if (comanda.comandaId == null) {
+      throw Exception("comanda sem ID.");
+    } else if (comanda.data == null) {
+      throw Exception("comanda sem data.");
+    } else if (comanda.funcionarioId == null) {
+      throw Exception("comanda sem Funcionario.");
+    } else if (comanda.horarioAbertura == null) {
+      throw Exception("comanda sem Horario de Abertura.");
+    } else if (comanda.data == null) {
+      throw Exception("comanda sem data.");
+    } else if (comanda.mesaId == null) {
+      throw Exception("comanda sem Mesa associada.");
+    } else if (comanda.quantidadePessoas == null) {
+      throw Exception("comanda sem pessoas registradas.");
+    } else if (comanda.valorTotal == null) {
+      throw Exception("comanda sem valor registrado.");
+    }
+
+    try {
+      repository.update(comanda);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

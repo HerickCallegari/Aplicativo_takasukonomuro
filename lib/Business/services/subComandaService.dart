@@ -38,6 +38,7 @@ class SubComandaService implements ISubComandaRepository {
     if (lista == null) {
       throw Exception("Não foi possivel obter a lista de SubComandas");
     }
+    return lista;
   }
 
   @override

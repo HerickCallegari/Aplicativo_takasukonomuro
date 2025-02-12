@@ -8,4 +8,5 @@ abstract class IMesaService {
   Future<void> remove(Mesa? mesa);
   Future<Mesa?> findBy(String? id);
   Future<List<Mesa>> findAll();
+  Future<void> aumentaQuantidadePessoas(int pessoas);
 }

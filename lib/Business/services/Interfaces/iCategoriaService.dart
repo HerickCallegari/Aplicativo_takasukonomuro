@@ -2,7 +2,7 @@ import 'package:takasukonomuro/business/repositories/categoriaRepository.dart';
 import 'package:takasukonomuro/models/categoria.dart';
 
 abstract class ICategoriaService {
-  CategoriaRepository repository;
+  late CategoriaRepository repository;
   Future<void> add(Categoria? categoria);
   Future<void> update(Categoria? categoria);
   Future<void> remove(Categoria? categoria);
