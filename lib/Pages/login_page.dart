@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
+import 'package:takasukonomuro/business/services/funcionarioService.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
 import 'package:takasukonomuro/pages/gerente_page.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
@@ -219,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return;
                                 }
 
-                                if (funcionario.senha != senha) {
+                                if (!funcionario.verificarSenha(senha)) {
                                   setState(() {
                                     errorMessage = "Senha incorreta";
                                   });
@@ -231,10 +232,6 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 if (funcionario.login == 999) {
                                   // bloco de código para teste de funcionalidade
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GarcomPage()));
                                 } else if (funcionario.cargo == Cargo.Gerente) {
                                   Navigator.push(
                                       context,
