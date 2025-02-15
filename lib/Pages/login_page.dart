@@ -235,16 +235,13 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 if (funcionario.login == 999) {
                                   // bloco de código para teste de funcionalidade
-<<<<<<< HEAD
                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ResumoDiaPage()));
                                 }
                                 else if (funcionario.cargo == Cargo.Gerente) {
-=======
                                 } else if (funcionario.cargo == Cargo.Gerente) {
->>>>>>> 9ee604370f18e0e940b7e0b2c449e6bfa4cc086a
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

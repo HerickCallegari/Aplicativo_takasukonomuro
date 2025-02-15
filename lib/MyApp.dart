@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/pages/home_page.dart';
-<<<<<<< HEAD
 
-=======
->>>>>>> 9ee604370f18e0e940b7e0b2c449e6bfa4cc086a
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

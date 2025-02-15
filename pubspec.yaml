@@ -17,11 +17,8 @@ dependencies:
   provider: ^5.0.0
   supabase_flutter: ^2.8.0
   cupertino_icons: ^1.0.8
-<<<<<<< HEAD
   font_awesome_flutter: ^10.0.0 
-=======
   crypto: ^3.0.6
->>>>>>> 9ee604370f18e0e940b7e0b2c449e6bfa4cc086a
 
 dev_dependencies:
   flutter_test:
