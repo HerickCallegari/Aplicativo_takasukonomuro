@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/Pages/GerentePages/gerente_page.dart';
+import 'package:takasukonomuro/Pages/GerentePages/resumo_dia_page.dart';
 import 'package:takasukonomuro/Pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
-import 'package:takasukonomuro/pages/gerentePage.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
+
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -235,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => GarcomPage()));
+                                          builder: (context) => ResumoDiaPage()));
                                 }
                                 else if (funcionario.cargo == Cargo.Gerente) {
                                   Navigator.push(

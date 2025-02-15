@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class GerentePage extends StatefulWidget {
-  const GerentePage({super.key});
+class ResumoDiaPage extends StatefulWidget {
+  const ResumoDiaPage({super.key});
 
   @override
-  State<GerentePage> createState() => _GerentePageState();
+  State<ResumoDiaPage> createState() => _ResumoDiaPageState();
 }
 
-class _GerentePageState extends State<GerentePage> {
+class _ResumoDiaPageState extends State<ResumoDiaPage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> orderList = [

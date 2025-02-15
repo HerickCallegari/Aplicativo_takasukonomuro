@@ -1,6 +1,6 @@
 import 'dart:ui'; // Import necessário para usar BackdropFilter
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/pages/LoginPage.dart';
+import 'package:takasukonomuro/pages/login_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
