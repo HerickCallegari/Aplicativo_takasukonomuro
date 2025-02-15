@@ -3,6 +3,7 @@ import 'package:takasukonomuro/Pages/GerentePages/gerente_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/resumo_dia_page.dart';
 import 'package:takasukonomuro/Pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
+import 'package:takasukonomuro/business/services/funcionarioService.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
@@ -167,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                                       nome: "kiria",
                                       senha: "123",
                                       cargo: Cargo.Gerente),
-                                   Funcionario(
+                                  Funcionario(
                                       login: 5,
                                       cpf: "1314815",
                                       nome: "baby",
@@ -222,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return;
                                 }
 
-                                if (funcionario.senha != senha) {
+                                if (!funcionario.verificarSenha(senha)) {
                                   setState(() {
                                     errorMessage = "Senha incorreta";
                                   });
@@ -232,23 +233,23 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   errorMessage = null;
                                 });
-                                if (funcionario.login == 999)
-                                {
+                                if (funcionario.login == 999) {
                                   // bloco de código para teste de funcionalidade
+<<<<<<< HEAD
                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ResumoDiaPage()));
                                 }
                                 else if (funcionario.cargo == Cargo.Gerente) {
+=======
+                                } else if (funcionario.cargo == Cargo.Gerente) {
+>>>>>>> 9ee604370f18e0e940b7e0b2c449e6bfa4cc086a
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GerentePage()));
-
-                                } 
-                                else if (funcionario.cargo == Cargo.Garcom)
-                                {
+                                } else if (funcionario.cargo == Cargo.Garcom) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
