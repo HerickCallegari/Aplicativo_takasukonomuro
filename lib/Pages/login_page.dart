@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
-import 'package:takasukonomuro/pages/gerentePage.dart';
+import 'package:takasukonomuro/pages/gerente_page.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
 
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                       nome: "kiria",
                                       senha: "123",
                                       cargo: Cargo.Gerente),
-                                   Funcionario(
+                                  Funcionario(
                                       login: 5,
                                       cpf: "1314815",
                                       nome: "baby",
@@ -229,23 +229,18 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   errorMessage = null;
                                 });
-                                if (funcionario.login == 999)
-                                {
+                                if (funcionario.login == 999) {
                                   // bloco de código para teste de funcionalidade
-                                   Navigator.push(
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GarcomPage()));
-                                }
-                                else if (funcionario.cargo == Cargo.Gerente) {
+                                } else if (funcionario.cargo == Cargo.Gerente) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GerentePage()));
-
-                                } 
-                                else if (funcionario.cargo == Cargo.Garcom)
-                                {
+                                } else if (funcionario.cargo == Cargo.Garcom) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
