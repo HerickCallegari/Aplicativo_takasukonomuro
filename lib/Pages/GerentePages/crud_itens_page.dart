@@ -18,7 +18,7 @@ class _CrudItensPageState extends State<CrudItensPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // Cor do fundo
+      backgroundColor: Colors.transparent, // Fundo transparente para que a imagem seja visível
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
@@ -63,21 +63,31 @@ class _CrudItensPageState extends State<CrudItensPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Lista Itens', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)), // Alterado para "Lista Itens"
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/teste.png'), // Caminho para a imagem de fundo
+            fit: BoxFit.cover, // Faz com que a imagem cubra toda a tela
+            alignment: Alignment.center, // Centraliza a imagem
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              // Removido o texto "Lista Itens"
+              SizedBox(height: 20),
+              // Usando shrinkWrap no ListView para corrigir o erro
+              ListView.builder(
+                shrinkWrap: true, // Impede o erro do Expanded
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   return _buildItemCard(items[index]);
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: Padding(

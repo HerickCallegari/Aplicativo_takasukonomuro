@@ -238,10 +238,9 @@ class _LoginPageState extends State<LoginPage> {
                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ResumoDiaPage()));
+                                          builder: (context) => GerentePage()));
                                 }
-                                else if (funcionario.cargo == Cargo.Gerente) {
-                                } else if (funcionario.cargo == Cargo.Gerente) {
+                                 else if (funcionario.cargo == Cargo.Gerente) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

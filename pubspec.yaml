@@ -33,6 +33,14 @@ flutter:
     - assets/images/yaki.jpg
     - assets/images/fundo_login.png
     - assets/Dev.env
+    - assets/images/logo_app.jpg
+    - assets/images/item_sushi.jpeg
+    - assets/images/teste.png
+    - assets/images/mesasFundo.png
+    - assets/images/funcionariosFundo.png
+    - assets/images/fomularioFuncFundo.png
+    - assets/images/formularioMesasFundo.png
+
   
   fonts:
     - family: PlayFairDisplay

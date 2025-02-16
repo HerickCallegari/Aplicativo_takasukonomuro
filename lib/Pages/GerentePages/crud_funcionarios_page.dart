@@ -20,7 +20,7 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // Cor de fundo
+      backgroundColor: Colors.transparent, // Transparente para exibir o background
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
@@ -65,78 +65,79 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: funcionarios.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
-                      leading: Icon(Icons.person, size: 40),
-                      title: Text(funcionarios[index]['name']!),
-                      subtitle: Text(funcionarios[index]['role']!),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit, color: Colors.black),
-                            onPressed: () {
-                              // Lógica para editar o funcionário
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              // Lógica para deletar o funcionário
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+      body: Stack(
+        children: [
+          // 📷 BACKGROUND IMAGE ADICIONADO AQUI
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/funcionariosFundo.png'), // Mesmo fundo da tela de mesas
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               ),
             ),
-            // Botão Adicionar Funcionário alinhado à direita
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Redireciona para a página de cadastro de funcionário
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FormularioFuncionarioPage()), // Página de cadastro
-                  );
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.add, color: Colors.white), // Símbolo "+"
-                    SizedBox(width: 8), // Espaçamento entre o ícone e o texto
-                    Text(
-                      'Adicionar Funcionário',
-                      style: TextStyle(color: Colors.white), // Texto em branco
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: funcionarios.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          child: ListTile(
+                            leading: Icon(Icons.person, size: 40),
+                            title: Text(funcionarios[index]['name']!),
+                            subtitle: Text(funcionarios[index]['role']!),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.black),
+                                  onPressed: () {
+                                    // Lógica para editar o funcionário
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () {
+                                    // Lógica para deletar o funcionário
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black, // Cor de fundo do botão
-                  foregroundColor: Colors.white, // Cor do texto
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  side: BorderSide(color: Colors.black), // Borda preta
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.23, // 🔽 Abaixei para melhor alinhamento
+            left: MediaQuery.of(context).size.width * 0.5 - 100, // 🔼 Mantido centralizado
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FormularioFuncionarioPage()),
+                );
+              },
+              label: Text(
+                'Adicionar Funcionário',
+                style: TextStyle(color: Colors.white),
+              ),
+              icon: Icon(Icons.add, color: Colors.white),
+              backgroundColor: Colors.black,
+            ),
+          ),
+        ],
       ),
     );
   }

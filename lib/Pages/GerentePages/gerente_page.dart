@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/Pages/GerentePages/crud_mesas_page.Dart';
 import 'package:takasukonomuro/Pages/login_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/crud_itens_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/crud_funcionarios_page.dart';
-import 'package:takasukonomuro/Pages/GerentePages/crud_mesas_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/resumo_dia_page.dart';
 
 class GerentePage extends StatefulWidget {
@@ -22,11 +22,11 @@ class _GerentePageState extends State<GerentePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // Cor do fundo conforme especificado
+      backgroundColor: Colors.transparent,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100), // Ajuste do tamanho da AppBar
+        preferredSize: Size.fromHeight(100),
         child: Container(
-          color: Colors.white, // Cor de fundo da AppBar
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -35,7 +35,7 @@ class _GerentePageState extends State<GerentePage> {
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()), // Navegar de volta para a LoginPage
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                   child: const Icon(
@@ -44,11 +44,11 @@ class _GerentePageState extends State<GerentePage> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(width: 16), // Espaço entre o ícone de voltar e o nome
+                SizedBox(width: 16),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Colors.white, // Cor de fundo do nome
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -70,51 +70,61 @@ class _GerentePageState extends State<GerentePage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Visão Geral', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildCard(Icons.people, 'Funcionários', onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CrudFuncionariosPage()), // Navegação para CrudFuncionariosPage
-                  );
-                }),
-                _buildCard(Icons.table_bar, 'Mesas'),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildCard(
-                  Icons.food_bank, 
-                  'Produtos', 
-                  onTap: () {
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/logo_app.jpg'),
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Text(
+                'Visão Geral',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildCard(Icons.people, 'Funcionários', onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CrudItensPage()), // Navegação para CrudItemsPage
+                      MaterialPageRoute(builder: (context) => CrudFuncionariosPage()),
                     );
-                  }
-                ),
-                _buildCard(
-                  Icons.monetization_on, 
-                  'Vendas do dia', 
-                  onTap: () {
+                  }),
+                  _buildCard(Icons.table_bar, 'Mesas', onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResumoDiaPage()), // Navegação para ResumoDiaPage
+                      MaterialPageRoute(builder: (context) => CrudMesasPage()),
                     );
-                  }
-                ),
-              ],
-            ),
-          ],
+                  }),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildCard(Icons.food_bank, 'Produtos', onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CrudItensPage()),
+                    );
+                  }),
+                  _buildCard(Icons.monetization_on, 'Vendas do dia', onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResumoDiaPage()),
+                    );
+                  }),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

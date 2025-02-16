@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/business/services/funcionarioService.dart'; // Importando o serviço
-import 'package:takasukonomuro/models/funcionario.dart'; // Caminho para o modelo Funcionario
-import 'package:takasukonomuro/models/enums/cargo.dart'; // Importando o enum para Cargo
+import 'package:takasukonomuro/business/services/funcionarioService.dart';
+import 'package:takasukonomuro/models/funcionario.dart';
+import 'package:takasukonomuro/models/enums/cargo.dart';
 
 class FormularioFuncionarioPage extends StatefulWidget {
   @override
@@ -16,18 +16,18 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
   final _cpfController = TextEditingController();
   final _senhaController = TextEditingController();
   final _cargoController = TextEditingController();
-  
+
   final FuncionarioService funcionarioService = FuncionarioService();
 
-  List<String> cargos = ['Garçom', 'Gerente']; // Lista de cargos atualizada
-  String selectedCargo = 'Garçom'; // Cargo selecionado inicialmente
+  List<String> cargos = ['Garçom', 'Gerente'];
+  String selectedCargo = 'Garçom';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // Cor de fundo suave
+      backgroundColor: Colors.transparent, // Tornar transparente para exibir a imagem de fundo
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100), // Ajuste da altura para o conteúdo caber
+        preferredSize: Size.fromHeight(100),
         child: Container(
           color: Colors.white,
           child: Padding(
@@ -36,7 +36,7 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context); // Voltar para a tela anterior
+                    Navigator.pop(context);
                   },
                   child: const Icon(
                     Icons.arrow_back,
@@ -60,7 +60,7 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      overflow: TextOverflow.ellipsis, // Garante que o texto não ultrapasse o limite
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                   ),
@@ -68,228 +68,161 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
                 IconButton(
                   icon: Icon(Icons.account_circle),
                   onPressed: () {},
-                  padding: EdgeInsets.zero, // Para reduzir o espaço do ícone
+                  padding: EdgeInsets.zero,
                 ),
               ],
             ),
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Container(
-            width: 340, // Largura do fundo branco ajustada
+      body: Stack(
+        children: [
+          Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black12)],
+              image: DecorationImage(
+                image: AssetImage('assets/images/fomularioFuncFundo.png'), // Mesmo fundo das outras telas
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+              ),
             ),
-            child: Padding(
+          ),
+          Center(
+            child: Container(
+              width: 340,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black12)],
+              ),
               padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, // Garante que o container não ocupe toda a tela
                   children: [
-                    // Login
-                    TextFormField(
-                      controller: _loginController,
-                      decoration: InputDecoration(
-                        labelText: 'Login*',
-                        hintText: 'Digite o Login do funcionário',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o Login do funcionário.';
-                        }
-                        return null;
-                      },
-                    ),
+                    _buildTextField(_loginController, 'Login*', 'Digite o Login do funcionário'),
                     SizedBox(height: 20),
-
-                    // Nome Completo
-                    TextFormField(
-                      controller: _nomeController,
-                      decoration: InputDecoration(
-                        labelText: 'Nome Completo*',
-                        hintText: 'Ex: Matheus Martins Lordron',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o nome completo do funcionário.';
-                        }
-                        return null;
-                      },
-                    ),
+                    _buildTextField(_nomeController, 'Nome Completo*', 'Ex: Matheus Martins Lordron'),
                     SizedBox(height: 20),
-
-                    // CPF
-                    TextFormField(
-                      controller: _cpfController,
-                      decoration: InputDecoration(
-                        labelText: 'CPF*',
-                        hintText: 'Ex: 000.000.000-00',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o CPF do funcionário.';
-                        }
-                        return null;
-                      },
-                    ),
+                    _buildTextField(_cpfController, 'CPF*', 'Ex: 000.000.000-00'),
                     SizedBox(height: 20),
-
-                    // Senha
-                    TextFormField(
-                      controller: _senhaController,
-                      decoration: InputDecoration(
-                        labelText: 'Senha*',
-                        hintText: 'Insira a senha do funcionário',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a senha do funcionário.';
-                        }
-                        return null;
-                      },
-                    ),
+                    _buildTextField(_senhaController, 'Senha*', 'Insira a senha do funcionário', isPassword: true),
                     SizedBox(height: 20),
-
-                    // Cargo
-                    DropdownButtonFormField<String>(
-                      value: selectedCargo,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedCargo = newValue!;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Cargo*',
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      ),
-                      items: cargos.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, selecione o cargo.';
-                        }
-                        return null;
-                      },
-                    ),
-                    Spacer(), // Esse espaço puxa os botões para baixo
-
-                    // Botões de Salvar e Cancelar
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0), // Adicionando um padding extra
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Voltar para a tela anterior
-                            },
-                            child: Text(
-                              'Cancelar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey,
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                // Cria um novo funcionário
-                                final funcionario = Funcionario(
-                                  login: null, // Login gerado automaticamente no banco
-                                  nome: _nomeController.text,
-                                  cpf: _cpfController.text,
-                                  senha: _senhaController.text,
-                                  cargo: _getCargo(selectedCargo), // Converte para o enum
-                                );
-
-                                try {
-                                  // Comente a linha abaixo para testar o front-end sem o Supabase
-                                  // await funcionarioService.add(funcionario);
-                                  print('Funcionário salvo localmente: ${funcionario.nome}, ${funcionario.cpf}, ${funcionario.cargo}');
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Funcionário salvo com sucesso!")),
-                                  );
-                                  Navigator.pop(context); // Volta para a tela anterior
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Erro ao salvar funcionário: $e")),
-                                  );
-                                }
-                              }
-                            },
-                            child: Text(
-                              'Salvar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildDropdown(),
+                    SizedBox(height: 20),
+                    _buildButtons(context),
                   ],
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, String hint, {bool isPassword = false}) {
+    return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        labelStyle: TextStyle(color: Colors.black),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Por favor, preencha este campo.';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildDropdown() {
+    return DropdownButtonFormField<String>(
+      value: selectedCargo,
+      onChanged: (String? newValue) {
+        setState(() {
+          selectedCargo = newValue!;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Cargo*',
+        labelStyle: TextStyle(color: Colors.black),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      ),
+      items: cargos.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Por favor, selecione o cargo.';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Cancelar', style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if (_formKey.currentState?.validate() ?? false) {
+              final funcionario = Funcionario(
+                login: null,
+                nome: _nomeController.text,
+                cpf: _cpfController.text,
+                senha: _senhaController.text,
+                cargo: _getCargo(selectedCargo),
+              );
+
+              try {
+                print('Funcionário salvo localmente: ${funcionario.nome}, ${funcionario.cpf}, ${funcionario.cargo}');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Funcionário salvo com sucesso!")));
+                Navigator.pop(context);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erro ao salvar funcionário: $e")));
+              }
+            }
+          },
+          child: Text('Salvar', style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      ],
     );
   }
 
