@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Pages/GerentePages/formulario_itens_page.dart'; // Caminho correto para a tela de Formulário
+import 'package:takasukonomuro/Pages/GerentePages/formulario_itens_page.dart';
+import 'package:takasukonomuro/business/services/itemService.dart';
+import 'package:takasukonomuro/models/item.dart'; // Caminho correto para a tela de Formulário
 
 class CrudItensPage extends StatefulWidget {
   @override
@@ -7,18 +9,37 @@ class CrudItensPage extends StatefulWidget {
 }
 
 class _CrudItensPageState extends State<CrudItensPage> {
+  final ItemService service = ItemService();
   // Lista de produtos para exibir
-  final List<Map<String, dynamic>> items = [
-    {'name': 'Camarão', 'price': 34.00, 'quantity': 70},
-    {'name': 'Sushi', 'price': 25.00, 'quantity': 50},
-    {'name': 'Tempura', 'price': 40.00, 'quantity': 30},
-    {'name': 'Yakimeshi', 'price': 20.00, 'quantity': 60},
-  ];
+  List<Item> items = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadItems();
+  }
+
+  Future<void> _loadItems() async {
+    try {
+      List<Item> loadedItems = await service.findAll();
+      setState(() {
+        items = loadedItems;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Erro ao carregar itens: \$e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Fundo transparente para que a imagem seja visível
+      backgroundColor: Colors
+          .transparent, // Fundo transparente para que a imagem seja visível
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
@@ -66,7 +87,8 @@ class _CrudItensPageState extends State<CrudItensPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/teste.png'), // Caminho para a imagem de fundo
+            image: AssetImage(
+                'assets/images/teste.png'), // Caminho para a imagem de fundo
             fit: BoxFit.cover, // Faz com que a imagem cubra toda a tela
             alignment: Alignment.center, // Centraliza a imagem
           ),
@@ -111,17 +133,17 @@ class _CrudItensPageState extends State<CrudItensPage> {
     );
   }
 
-  Widget _buildItemCard(Map<String, dynamic> item) {
+  Widget _buildItemCard(Item item) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        title: Text(item['name']),
+        title: Text(item.descricao),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('R\$ ${item['price'].toStringAsFixed(2)}'),
-            Text('Quantidade: ${item['quantity']}'),
+            Text('R\$ ${item.preco.toStringAsFixed(2)}'),
+            Text('Quantidade: ${item.estoque}'),
           ],
         ),
         trailing: Row(
@@ -131,12 +153,21 @@ class _CrudItensPageState extends State<CrudItensPage> {
               icon: Icon(Icons.edit, color: Colors.black),
               onPressed: () {
                 // Lógica para editar o item
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FormularioItensPage(
+                        item:
+                            item), // Aqui está correto, nao sei porque ele esta reclamando
+                  ),
+                );
               },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                // Lógica para deletar o item
+                ItemService itemservice = ItemService();
+                itemservice.remove(item);
               },
             ),
           ],

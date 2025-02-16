@@ -2,7 +2,7 @@ import 'package:takasukonomuro/business/repositories/itemRepository.dart';
 import 'package:takasukonomuro/business/services/Interfaces/iItemService.dart';
 import 'package:takasukonomuro/models/item.dart';
 
-class Itemservice implements IItemService {
+class ItemService implements IItemService {
   @override
   late ItemRepository repository = ItemRepository();
 
