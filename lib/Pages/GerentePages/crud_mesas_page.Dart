@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/business/services/mesaService.dart';
+import 'package:takasukonomuro/models/mesa.dart';
 import 'package:takasukonomuro/Pages/GerentePages/formulario_mesas_page.dart';
 
 class CrudMesasPage extends StatefulWidget {
@@ -7,13 +9,22 @@ class CrudMesasPage extends StatefulWidget {
 }
 
 class _CrudMesasPageState extends State<CrudMesasPage> {
-  final List<Map<String, String>> mesas = [
-    {'nome': 'Mesa 1', 'status': 'Disponível'},
-    {'nome': 'Mesa 2', 'status': 'Disponível'},
-    {'nome': 'Mesa 3', 'status': 'Disponível'},
-    {'nome': 'Mesa 4', 'status': 'Disponível'},
-    {'nome': 'Mesa 5', 'status': 'Disponível'},
-  ];
+  final MesaService mesaService = MesaService();
+  late Future<List<Mesa>> mesas;
+
+  @override
+  void initState() {
+    super.initState();
+    // Chama o método findAll do serviço para carregar as mesas ao iniciar a página
+    mesas = mesaService.findAll();
+  }
+
+  // Método para buscar as mesas novamente após uma operação (adicionar ou remover)
+  void _refreshMesaList() {
+    setState(() {
+      mesas = mesaService.findAll();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +84,26 @@ class _CrudMesasPageState extends State<CrudMesasPage> {
               child: Column(
                 children: [
                   SizedBox(height: 20),
+                  // Exibe as mesas ou mostra um indicador de carregamento
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: mesas.length,
-                      itemBuilder: (context, index) {
-                        return _buildMesaCard(mesas[index]);
+                    child: FutureBuilder<List<Mesa>>(
+                      future: mesas,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Erro ao carregar as mesas.'));
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(child: Text('Nenhuma mesa encontrada.'));
+                        } else {
+                          List<Mesa> mesaList = snapshot.data!;
+                          return ListView.builder(
+                            itemCount: mesaList.length,
+                            itemBuilder: (context, index) {
+                              return _buildMesaCard(mesaList[index]);
+                            },
+                          );
+                        }
                       },
                     ),
                   ),
@@ -92,9 +118,11 @@ class _CrudMesasPageState extends State<CrudMesasPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => FormularioMesasPage()),
-                );
+                  MaterialPageRoute(builder: (context) => FormularioMesasPage()),
+                ).then((value) {
+                  // Após o retorno do formulário, atualiza a lista de mesas
+                  _refreshMesaList();
+                });
               },
               label: Text(
                 'Adicionar Mesa',
@@ -109,7 +137,7 @@ class _CrudMesasPageState extends State<CrudMesasPage> {
     );
   }
 
-  Widget _buildMesaCard(Map<String, String> mesa) {
+  Widget _buildMesaCard(Mesa mesa) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -118,18 +146,41 @@ class _CrudMesasPageState extends State<CrudMesasPage> {
           backgroundColor: Colors.grey[300],
           child: Icon(Icons.table_bar, color: Colors.black),
         ),
-        title: Text(mesa['nome']!),
-        subtitle: Text(mesa['status']!),
+        title: Text(mesa.descricao),
+        subtitle: Text(mesa.getStatus().toString().split('.').last),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: Icon(Icons.edit, color: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                // Navega para o formulário de edição, passando os dados da mesa
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FormularioMesasPage(mesa: mesa),
+                  ),
+                ).then((value) {
+                  // Após a edição, atualiza a lista de mesas
+                  _refreshMesaList();
+                });
+              },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () {},
+              onPressed: () async {
+                // Exclui a mesa
+                try {
+                  await mesaService.remove(mesa);
+                  // Atualiza a lista após remoção
+                  _refreshMesaList();
+                } catch (e) {
+                  // Em caso de erro, exibe um alerta
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro ao excluir a mesa.')),
+                  );
+                }
+              },
             ),
           ],
         ),

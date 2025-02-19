@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/GerentePages/formulario_itens_page.dart';
 import 'package:takasukonomuro/business/services/itemService.dart';
-import 'package:takasukonomuro/models/item.dart'; // Caminho correto para a tela de Formulário
+import 'package:takasukonomuro/models/item.dart'; 
 
 class CrudItensPage extends StatefulWidget {
   @override

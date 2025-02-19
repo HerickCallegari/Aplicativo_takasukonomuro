@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/business/services/mesaService.dart';
+import 'package:takasukonomuro/models/mesa.dart';
+import 'package:takasukonomuro/models/enums/status.dart';
 
 class FormularioMesasPage extends StatefulWidget {
+  final Mesa? mesa;
+
+  // Construtor para permitir edição ou criação de mesa
+  FormularioMesasPage({this.mesa});
+
   @override
   _FormularioMesasPageState createState() => _FormularioMesasPageState();
 }
@@ -14,13 +22,34 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
     'Disponível',
     'Ocupada',
     'Reservada',
-    'Manutenção'
   ];
+
+  // Variável para saber se estamos editando ou criando uma nova mesa
+  late bool _isEdit;
+
+  @override
+void initState() {
+  super.initState();
+  if (widget.mesa != null) {
+    _isEdit = true;
+    _descricaoController.text = widget.mesa!.descricao;
+    _statusSelecionado = widget.mesa!.getStatus();
+
+    // Garantir que o valor de _statusSelecionado seja um dos valores válidos
+    if (!statusOptions.contains(_statusSelecionado)) {
+      _statusSelecionado = statusOptions[0]; // Se não for válido, coloca um valor padrão
+    }
+  } else {
+    _isEdit = false;
+    _statusSelecionado = statusOptions[0]; // Definindo um valor padrão para novo registro
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Torna o fundo transparente para exibir a imagem
+      backgroundColor: Colors.transparent,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: Container(
@@ -42,7 +71,7 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
                 SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    'Cadastro de Mesa',
+                    _isEdit ? 'Editar Mesa' : 'Cadastro de Mesa',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -68,7 +97,7 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/formularioMesasFundo.png'), // Fundo correto
+                image: AssetImage('assets/images/formularioMesasFundo.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
@@ -87,7 +116,7 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Ajusta altura ao conteúdo
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildTextField(_descricaoController, 'Descrição*', 'Digite a descrição da mesa'),
                     SizedBox(height: 20),
@@ -179,9 +208,28 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
         ElevatedButton(
           onPressed: () async {
             if (_formKey.currentState?.validate() ?? false) {
-              print('Mesa cadastrada: ${_descricaoController.text}, Status: $_statusSelecionado');
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mesa cadastrada com sucesso!")));
-              Navigator.pop(context);
+              try {
+                // Se for edição, atualiza a mesa, caso contrário cria uma nova
+                if (_isEdit) {
+                  Mesa updatedMesa = Mesa(
+                    mesaId: widget.mesa!.mesaId,  // ID da mesa para edição
+                    descricao: _descricaoController.text,
+                    status: _getStatusFromString(_statusSelecionado!),  // Converte a string em Status
+                  );
+                  await MesaService().update(updatedMesa);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mesa atualizada com sucesso!")));
+                } else {
+                  Mesa newMesa = Mesa(
+                    descricao: _descricaoController.text,
+                    status: _getStatusFromString(_statusSelecionado!),  // Converte a string em Status
+                  );
+                  await MesaService().add(newMesa);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mesa cadastrada com sucesso!")));
+                }
+                Navigator.pop(context);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erro ao salvar a mesa. Tente novamente!")));
+              }
             }
           },
           child: Text('Salvar', style: TextStyle(color: Colors.white)),
@@ -193,5 +241,19 @@ class _FormularioMesasPageState extends State<FormularioMesasPage> {
         ),
       ],
     );
+  }
+
+  // Função para converter o status string para o enum Status
+  Status _getStatusFromString(String status) {
+    switch (status) {
+      case 'Disponível':
+        return Status.Livre;
+      case 'Ocupada':
+        return Status.Ocupado;
+      case 'Reservada':
+        return Status.Reservado;
+      default:
+        return Status.Livre;  // Valor padrão
+    }
   }
 }

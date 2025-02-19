@@ -67,7 +67,6 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
       ),
       body: Stack(
         children: [
-          // 📷 BACKGROUND IMAGE ADICIONADO AQUI
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
