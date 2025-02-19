@@ -2,7 +2,7 @@ import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.da
 import 'package:takasukonomuro/business/services/Interfaces/iItemSubComandaService.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';
 
-class Itemsubcomandaservice implements IItemSubComandaService {
+class ItemSubComandasService implements IItemSubComandaService {
   @override
   ItemSubComandaRepository repository = ItemSubComandaRepository();
 

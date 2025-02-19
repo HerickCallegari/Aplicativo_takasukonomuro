@@ -1,15 +1,16 @@
 import 'package:takasukonomuro/business/repositories/comandaRepository.dart';
 import 'package:takasukonomuro/business/repositories/interfaces/iComandaRepository.dart';
+import 'package:takasukonomuro/business/services/Interfaces/iComandaService.dart';
 import 'package:takasukonomuro/models/comanda.dart';
 
-class Comandaservice implements IComandaRepository {
+class ComandaService implements IComandaService {
   @override
   late ComandaRepository repository = ComandaRepository();
 
   @override
-  Future<void> add(Comanda comanda) async {
-    if (comanda is Null) {
-      throw Exception("Comanda nâo existe");
+  Future<void> add(Comanda? comanda) async {
+    if (comanda == null) {
+      throw Exception("Comanda esta null.");
     } else if (comanda.funcionarioId == null) {
       throw Exception("Comanda sem garçom");
     }
@@ -40,7 +41,10 @@ class Comandaservice implements IComandaRepository {
   }
 
   @override
-  Future<Comanda?> findBy(String id) {
+  Future<Comanda?> findBy(String? id) {
+    if (id == null || id == '') {
+      throw Exception("Id esta null");
+    }
     try {
       return repository.findBy(id);
     } catch (e) {
@@ -49,8 +53,10 @@ class Comandaservice implements IComandaRepository {
   }
 
   @override
-  Future<void> remove(Comanda comanda) async {
-    if (comanda.comandaId == null) {
+  Future<void> remove(Comanda? comanda) async {
+    if (comanda == null) {
+      throw Exception("Comanda esta null.");
+    } else if (comanda.comandaId == null) {
       throw Exception("Comanda não encontrada");
     }
     try {
@@ -61,8 +67,10 @@ class Comandaservice implements IComandaRepository {
   }
 
   @override
-  Future<void> update(Comanda comanda) async {
-    if (comanda.pago == null) {
+  Future<void> update(Comanda? comanda) async {
+    if (comanda == null) {
+      throw Exception("Comanda esta null.");
+    } else if (comanda.pago == null) {
       throw Exception("Sem informação sobre o pagamento.");
     } else if (comanda.comandaId == null) {
       throw Exception("comanda sem ID.");
@@ -84,6 +92,18 @@ class Comandaservice implements IComandaRepository {
 
     try {
       repository.update(comanda);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Comanda>> findByDate(DateTime? data) {
+    if (data == null) {
+      throw Exception("Data esta null.");
+    }
+    try {
+      return repository.findByDate(data);
     } catch (e) {
       rethrow;
     }

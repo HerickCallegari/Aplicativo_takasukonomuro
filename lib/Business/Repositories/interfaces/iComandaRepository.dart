@@ -6,4 +6,5 @@ abstract class IComandaRepository {
   Future<void> remove(Comanda comanda);
   Future<List<Comanda>> findAll();
   Future<Comanda?> findBy(String id);
+  Future<List<Comanda>> findByDate(DateTime data);
 }

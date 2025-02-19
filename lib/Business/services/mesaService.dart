@@ -1,8 +1,9 @@
 import 'package:takasukonomuro/business/repositories/interfaces/iMesaRepository.dart';
 import 'package:takasukonomuro/business/repositories/mesaRepository.dart';
+import 'package:takasukonomuro/business/services/Interfaces/iMesaService.dart';
 import 'package:takasukonomuro/models/mesa.dart';
 
-class MesaService implements IMesaRepository {
+class MesaService implements IMesaService {
   @override
   late MesaRepository repository = MesaRepository();
 
@@ -76,5 +77,11 @@ class MesaService implements IMesaRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> aumentaQuantidadePessoas(int pessoas) {
+    // TODO: implement aumentaQuantidadePessoas
+    throw UnimplementedError();
   }
 }
