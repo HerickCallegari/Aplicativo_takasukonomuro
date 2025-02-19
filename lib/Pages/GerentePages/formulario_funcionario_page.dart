@@ -4,6 +4,10 @@ import 'package:takasukonomuro/models/funcionario.dart';
 import 'package:takasukonomuro/models/enums/cargo.dart';
 
 class FormularioFuncionarioPage extends StatefulWidget {
+  final Funcionario? funcionario;  // Para edição de um funcionário existente
+
+  FormularioFuncionarioPage({this.funcionario});
+
   @override
   _FormularioFuncionarioPageState createState() =>
       _FormularioFuncionarioPageState();
@@ -15,17 +19,35 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
   final _senhaController = TextEditingController();
-  final _cargoController = TextEditingController();
+  String selectedCargo = 'Garçom';  // Valor padrão
 
   final FuncionarioService funcionarioService = FuncionarioService();
 
   List<String> cargos = ['Garçom', 'Gerente'];
-  String selectedCargo = 'Garçom';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.funcionario != null) {
+      // Se for edição, preencher os campos com os dados do funcionário
+      _nomeController.text = widget.funcionario!.nome;
+      _cpfController.text = widget.funcionario!.cpf;
+      _senhaController.text = widget.funcionario!.senha;
+      
+      // Verificar se o cargo é válido na lista
+      selectedCargo = widget.funcionario!.cargo.toString().split('.').last;
+
+      // Garantir que o valor de selectedCargo seja um dos valores válidos
+      if (!cargos.contains(selectedCargo)) {
+        selectedCargo = cargos[0];  // Se não for válido, coloca um valor padrão
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Tornar transparente para exibir a imagem de fundo
+      backgroundColor: Colors.transparent,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
@@ -54,7 +76,9 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
                       boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12)],
                     ),
                     child: Text(
-                      'Cadastro de Funcionário',
+                      widget.funcionario != null
+                          ? 'Editar Funcionário'
+                          : 'Cadastro de Funcionário',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -80,7 +104,7 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/fomularioFuncFundo.png'), // Mesmo fundo das outras telas
+                image: AssetImage('assets/images/fomularioFuncFundo.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
@@ -99,9 +123,10 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Garante que o container não ocupe toda a tela
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildTextField(_loginController, 'Login*', 'Digite o Login do funcionário'),
+                    _buildTextField(
+                        _loginController, 'Login*', 'Digite o Login do funcionário'),
                     SizedBox(height: 20),
                     _buildTextField(_nomeController, 'Nome Completo*', 'Ex: Matheus Martins Lordron'),
                     SizedBox(height: 20),
@@ -199,7 +224,7 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
           onPressed: () async {
             if (_formKey.currentState?.validate() ?? false) {
               final funcionario = Funcionario(
-                login: null,
+                login: widget.funcionario?.login,  // Para edição de um funcionário existente
                 nome: _nomeController.text,
                 cpf: _cpfController.text,
                 senha: _senhaController.text,
@@ -207,8 +232,16 @@ class _FormularioFuncionarioPageState extends State<FormularioFuncionarioPage> {
               );
 
               try {
-                print('Funcionário salvo localmente: ${funcionario.nome}, ${funcionario.cpf}, ${funcionario.cargo}');
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Funcionário salvo com sucesso!")));
+                if (widget.funcionario != null) {
+                  // Se for edição, chama o update
+                  await FuncionarioService().update(funcionario);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Funcionário atualizado com sucesso!")));
+                } else {
+                  // Se for criação, chama o add
+                  await FuncionarioService().add(funcionario);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Funcionário salvo com sucesso!")));
+                }
+
                 Navigator.pop(context);
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erro ao salvar funcionário: $e")));

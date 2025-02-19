@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/GerentePages/formulario_itens_page.dart';
 import 'package:takasukonomuro/business/services/itemService.dart';
-import 'package:takasukonomuro/models/item.dart'; 
+import 'package:takasukonomuro/models/item.dart';
 
 class CrudItensPage extends StatefulWidget {
   @override
@@ -31,19 +31,26 @@ class _CrudItensPageState extends State<CrudItensPage> {
       setState(() {
         isLoading = false;
       });
-      print("Erro ao carregar itens: \$e");
+      print("Erro ao carregar itens: $e");
     }
+  }
+
+  // Função para atualizar a lista de itens
+  void _refreshItemList() {
+    setState(() {
+      isLoading = true; // Inicia o carregamento
+    });
+    _loadItems(); // Recarrega os itens chamando _loadItems
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors
-          .transparent, // Fundo transparente para que a imagem seja visível
+      backgroundColor: Colors.transparent,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
-          color: Colors.white, // Cor de fundo da AppBar
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -66,7 +73,7 @@ class _CrudItensPageState extends State<CrudItensPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    'Itens', // Alterado para "Itens"
+                    'Itens',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -75,9 +82,10 @@ class _CrudItensPageState extends State<CrudItensPage> {
                   ),
                 ),
                 Spacer(),
+                // Botão de refresh
                 IconButton(
-                  icon: Icon(Icons.account_circle),
-                  onPressed: () {},
+                  icon: Icon(Icons.refresh),
+                  onPressed: _refreshItemList, // Atualiza a lista de itens
                 ),
               ],
             ),
@@ -87,10 +95,9 @@ class _CrudItensPageState extends State<CrudItensPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/images/teste.png'), // Caminho para a imagem de fundo
-            fit: BoxFit.cover, // Faz com que a imagem cubra toda a tela
-            alignment: Alignment.center, // Centraliza a imagem
+            image: AssetImage('assets/images/teste.png'),
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
           ),
         ),
         child: Padding(
@@ -98,11 +105,10 @@ class _CrudItensPageState extends State<CrudItensPage> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              // Removido o texto "Lista Itens"
               SizedBox(height: 20),
               // Usando shrinkWrap no ListView para corrigir o erro
               ListView.builder(
-                shrinkWrap: true, // Impede o erro do Expanded
+                shrinkWrap: true,
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   return _buildItemCard(items[index]);
@@ -120,13 +126,16 @@ class _CrudItensPageState extends State<CrudItensPage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => FormularioItensPage()),
-            );
+            ).then((value) {
+              // Após adicionar um novo item, atualiza a lista
+              _refreshItemList();
+            });
           },
           label: Text(
-            'Adicionar Item', // Mensagem dentro do botão
-            style: TextStyle(color: Colors.white), // Texto branco
+            'Adicionar Item',
+            style: TextStyle(color: Colors.white),
           ),
-          icon: Icon(Icons.add, color: Colors.white), // Ícone branco
+          icon: Icon(Icons.add, color: Colors.white),
           backgroundColor: Colors.black,
         ),
       ),
@@ -156,18 +165,27 @@ class _CrudItensPageState extends State<CrudItensPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FormularioItensPage(
-                        item:
-                            item), // Aqui está correto, nao sei porque ele esta reclamando
+                    builder: (context) => FormularioItensPage(item: item),
                   ),
-                );
+                ).then((value) {
+                  // Após a edição, atualiza a lista de itens
+                  _refreshItemList();
+                });
               },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 ItemService itemservice = ItemService();
-                itemservice.remove(item);
+                itemservice.remove(item).then((_) {
+                  // Atualiza a lista após a remoção
+                  _refreshItemList();
+                }).catchError((e) {
+                  // Exibe erro em caso de falha
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Erro ao excluir item: $e")),
+                  );
+                });
               },
             ),
           ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Pages/GerentePages/formulario_funcionario_page.dart'; // Importando a página do formulário
+import 'package:takasukonomuro/business/services/funcionarioService.dart';
+import 'package:takasukonomuro/models/funcionario.dart';
+import 'package:takasukonomuro/Pages/GerentePages/formulario_funcionario_page.dart';
 
 class CrudFuncionariosPage extends StatefulWidget {
   @override
@@ -7,15 +9,35 @@ class CrudFuncionariosPage extends StatefulWidget {
 }
 
 class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
-  // Lista fictícia de funcionários
-  final List<Map<String, String>> funcionarios = [
-    {'name': 'Marcos Felipe Souza', 'role': 'Garçom'},
-    {'name': 'André Mioto', 'role': 'Cozinheiro'},
-    {'name': 'Vanessa Lima', 'role': 'Garçom'},
-    {'name': 'Cláudio Silva', 'role': 'Zelador'},
-    {'name': 'Maria Ferreira', 'role': 'Zelador'},
-    {'name': 'Leila Pereira', 'role': 'Garçom'},
-  ];
+  // Lista que será carregada dinamicamente com os dados do banco
+  late Future<List<Funcionario>> funcionarios;
+
+  @override
+  void initState() {
+    super.initState();
+    funcionarios = FuncionarioService().findAll(); // Carregar lista de funcionários do banco
+  }
+
+  // Função para excluir o funcionário
+  void _deleteFuncionario(Funcionario funcionario) async {
+    try {
+      await FuncionarioService().remove(funcionario);  // Chama a função de remover
+      setState(() {
+        funcionarios = FuncionarioService().findAll();  // Atualiza a lista após a exclusão
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao excluir funcionário.')),
+      );
+    }
+  }
+
+  // Função para atualizar a lista de funcionários
+  void _refreshList() {
+    setState(() {
+      funcionarios = FuncionarioService().findAll();  // Recarrega a lista
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +79,8 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
                 ),
                 Spacer(),
                 IconButton(
-                  icon: Icon(Icons.account_circle),
-                  onPressed: () {},
+                  icon: Icon(Icons.refresh), // Ícone do botão de refresh
+                  onPressed: _refreshList, // Chama a função de atualizar a lista
                 ),
               ],
             ),
@@ -70,7 +92,7 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/funcionariosFundo.png'), // Mesmo fundo da tela de mesas
+                image: AssetImage('assets/images/funcionariosFundo.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
@@ -80,36 +102,56 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: funcionarios.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                          child: ListTile(
-                            leading: Icon(Icons.person, size: 40),
-                            title: Text(funcionarios[index]['name']!),
-                            subtitle: Text(funcionarios[index]['role']!),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.black),
-                                  onPressed: () {
-                                    // Lógica para editar o funcionário
-                                  },
+                    child: FutureBuilder<List<Funcionario>>(
+                      future: funcionarios, // Chama a função de buscar funcionários
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Erro ao carregar funcionários.'));
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(child: Text('Nenhum funcionário encontrado.'));
+                        } else {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              Funcionario funcionario = snapshot.data![index];
+                              return Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: ListTile(
+                                  leading: Icon(Icons.person, size: 40),
+                                  title: Text(funcionario.nome),
+                                  subtitle: Text(funcionario.getCargo().toString().split('.').last),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.edit, color: Colors.black),
+                                        onPressed: () {
+                                          // Navegar para a página de edição, passando os dados do funcionário
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => FormularioFuncionarioPage(funcionario: funcionario)),
+                                          );
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete, color: Colors.red),
+                                        onPressed: () {
+                                          // Chama a função de deletar
+                                          _deleteFuncionario(funcionario);
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    // Lógica para deletar o funcionário
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                              );
+                            },
+                          );
+                        }
                       },
                     ),
                   ),
@@ -118,8 +160,9 @@ class _CrudFuncionariosPageState extends State<CrudFuncionariosPage> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.23, // 🔽 Abaixei para melhor alinhamento
-            left: MediaQuery.of(context).size.width * 0.5 - 100, // 🔼 Mantido centralizado
+
+            bottom: MediaQuery.of(context).size.height * 0.21, // Ajustado para afastar mais do logo
+            left: MediaQuery.of(context).size.width * 0.5 - 100, // Centraliza o botão
             child: FloatingActionButton.extended(
               onPressed: () {
                 Navigator.push(
