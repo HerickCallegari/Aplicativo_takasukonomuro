@@ -2,7 +2,7 @@ import 'package:takasukonomuro/business/repositories/categoriaRepository.dart';
 import 'package:takasukonomuro/business/services/Interfaces/iCategoriaService.dart';
 import 'package:takasukonomuro/models/categoria.dart';
 
-class Categoriaservice implements ICategoriaService {
+class CategoriaService implements ICategoriaService {
   @override
   late CategoriaRepository repository = CategoriaRepository();
 

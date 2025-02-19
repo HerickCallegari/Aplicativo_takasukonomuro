@@ -8,4 +8,5 @@ abstract class IComandaService {
   Future<void> remove(Comanda? categoria);
   Future<Comanda?> findBy(String? id);
   Future<List<Comanda>> findAll();
+  Future<List<Comanda>> findByDate(DateTime? data);
 }

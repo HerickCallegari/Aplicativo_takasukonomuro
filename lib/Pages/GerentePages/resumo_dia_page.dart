@@ -1,22 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:takasukonomuro/business/services/comandaService.dart';
+import 'package:takasukonomuro/business/services/mesaService.dart';
+import 'package:takasukonomuro/models/comanda.dart';
+import 'package:takasukonomuro/models/enums/status.dart';
+import 'package:takasukonomuro/models/mesa.dart';
 
 class ResumoDiaPage extends StatefulWidget {
-  const ResumoDiaPage({super.key});
+  ResumoDiaPage({super.key, required this.data});
+
+  final DateTime data;
 
   @override
   State<ResumoDiaPage> createState() => _ResumoDiaPageState();
 }
 
 class _ResumoDiaPageState extends State<ResumoDiaPage> {
+  final ComandaService serviceComanda = ComandaService();
+  final MesaService serviceMesa = MesaService();
+  List<Comanda> comandas = [];
+  List<Mesa> mesas = [];
+  int qtClientes = 0;
+  double valorTotalComandas = 0;
+  int quantidadeFuncionarios = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _CarregarInformacoes();
+  }
+
+  void _CarregarInformacoes() async {
+    comandas = await serviceComanda.findByDate(widget.data);
+    mesas = await serviceMesa.findAll();
+    for (Comanda comanda in comandas) {
+      qtClientes += comanda.quantidadePessoas;
+      valorTotalComandas += comanda.valorTotal;
+    }
+    quantidadeFuncionarios = comandas.length;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<Widget> orderList = [
-      _buildOrderCard('Mesa 26', 'R\$ 12,90'),
-      _buildOrderCard('Mesa 30', 'R\$ 1239,00'),
-      _buildOrderCard('Mesa 4', 'R\$ 230,90'),
-      _buildOrderCard('Mesa 5', 'R\$ 45,89'),
-      for (int i = 0; i < 15; i++) _buildOrderCard('Mesa 5', 'R\$ 45,89'),
-    ];
+    List<Map<String, String>> comandasFormatadas = [];
+
+    for (Comanda comanda in comandas) {
+      Mesa? mesa = mesas?.firstWhere(
+        (Mesa x) => x.mesaId == comanda.mesaId,
+        orElse: () => Mesa(
+            mesaId: -1,
+            descricao: "Desconhecida",
+            status: Status.Livre), // Evita erro de null
+      );
+
+      Map<String, String> comandaFormatada = {
+        'Mesa': mesa!.descricao, // Primeiro o nome da mesa
+        'Valor Total': 'R\$ ${comanda.valorTotal}', // Depois o valor total
+        'Pago': comanda.pago == true ? 'Pago' : 'Aberto'
+      };
+
+      comandasFormatadas.add(comandaFormatada);
+    }
+
+    final List<Widget> orderList = comandasFormatadas.map((comandaFormatada) {
+      return _buildOrderCard(comandaFormatada['Mesa']!,
+          comandaFormatada['Valor Total']!, comandaFormatada['Pago']!);
+    }).toList();
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -72,14 +121,14 @@ class _ResumoDiaPageState extends State<ResumoDiaPage> {
                         children: [
                           _buildDashboardCard(
                               icon: Icons.inventory,
-                              title: 'Pedidos',
-                              value: '129',
+                              title: 'QT. Clientes',
+                              value: qtClientes.toString(),
                               heigth: _height * 0.1,
                               width: _width * 0.44),
                           _buildDashboardCard(
                               icon: Icons.attach_money,
                               title: 'Vendas do dia',
-                              value: 'R\$ 1.000,89',
+                              value: 'R\$ ${valorTotalComandas}',
                               width: _width * 0.44,
                               heigth: _height * 0.1),
                         ],
@@ -91,13 +140,13 @@ class _ResumoDiaPageState extends State<ResumoDiaPage> {
                           _buildDashboardCard(
                               icon: Icons.people,
                               title: 'Funcionários',
-                              value: '20',
+                              value: quantidadeFuncionarios.toString(),
                               width: _width * 0.44,
                               heigth: _height * 0.1),
                           _buildDashboardCard(
                               icon: Icons.inventory_2,
-                              title: 'Estoque',
-                              value: '96%',
+                              title: 'QT. Comandas',
+                              value: comandas.length.toString(),
                               width: _width * 0.44,
                               heigth: _height * 0.1),
                         ],
@@ -205,7 +254,7 @@ class _ResumoDiaPageState extends State<ResumoDiaPage> {
     );
   }
 
-  Widget _buildOrderCard(String table, String value) {
+  Widget _buildOrderCard(String table, String value, String pago) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -230,6 +279,14 @@ class _ResumoDiaPageState extends State<ResumoDiaPage> {
                   ),
                 ),
               ],
+            ),
+            Text(
+              pago,
+              style: const TextStyle(
+                fontFamily: 'PlayFairDisplay',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Text(
               value,

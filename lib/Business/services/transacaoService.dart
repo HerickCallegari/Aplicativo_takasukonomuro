@@ -2,7 +2,7 @@ import 'package:takasukonomuro/business/repositories/transacaoRepository.dart';
 import 'package:takasukonomuro/business/services/Interfaces/iTransacaoService.dart';
 import 'package:takasukonomuro/models/transacao.dart';
 
-class Transacaoservice implements ITransacaoService {
+class TransacaoService implements ITransacaoService {
   @override
   TransacaoRepository repository = TransacaoRepository();
 

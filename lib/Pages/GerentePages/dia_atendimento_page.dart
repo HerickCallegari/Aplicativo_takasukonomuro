@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:takasukonomuro/pages/GerentePages/resumo_dia_page.dart';
 
 class DiasAtendimentoPage extends StatefulWidget {
   @override
@@ -31,7 +32,10 @@ class _DiasAtendimentoPageState extends State<DiasAtendimentoPage> {
     });
   }
 
-  void _navigateToDayDetails(DateTime date) {}
+  void _navigateToDayDetails(DateTime date) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ResumoDiaPage(data: date)));
+  }
 
   @override
   Widget build(BuildContext context) {
