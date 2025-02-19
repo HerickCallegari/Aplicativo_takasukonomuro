@@ -4,6 +4,7 @@ import 'package:takasukonomuro/Pages/login_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/crud_itens_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/crud_funcionarios_page.dart';
 import 'package:takasukonomuro/Pages/GerentePages/resumo_dia_page.dart';
+import 'package:takasukonomuro/pages/GerentePages/dia_atendimento_page.dart';
 
 class GerentePage extends StatefulWidget {
   @override
@@ -85,7 +86,10 @@ class _GerentePageState extends State<GerentePage> {
               SizedBox(height: 20),
               Text(
                 'Visão Geral',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
               SizedBox(height: 20),
               Row(
@@ -94,7 +98,8 @@ class _GerentePageState extends State<GerentePage> {
                   _buildCard(Icons.people, 'Funcionários', onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CrudFuncionariosPage()),
+                      MaterialPageRoute(
+                          builder: (context) => CrudFuncionariosPage()),
                     );
                   }),
                   _buildCard(Icons.table_bar, 'Mesas', onTap: () {
@@ -118,7 +123,8 @@ class _GerentePageState extends State<GerentePage> {
                   _buildCard(Icons.monetization_on, 'Vendas do dia', onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResumoDiaPage()),
+                      MaterialPageRoute(
+                          builder: (context) => DiasAtendimentoPage()),
                     );
                   }),
                 ],
