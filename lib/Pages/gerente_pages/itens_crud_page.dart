@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Pages/gerente_pages/itens_formulario_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/itens_formulario_page.dart';
 import 'package:takasukonomuro/business/services/itemService.dart';
 import 'package:takasukonomuro/models/item.dart';
 

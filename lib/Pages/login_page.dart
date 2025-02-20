@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Pages/gerente_pages/gerente_page.dart';
-import 'package:takasukonomuro/Pages/gerente_pages/resumo_dia_page.dart';
-import 'package:takasukonomuro/Pages/garcom_pages/garcom_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/gerente_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/resumo_dia_page.dart';
+import 'package:takasukonomuro/pages/garcom_pages/garcom_page.dart';
 import 'package:takasukonomuro/business/repositories/ItemSubComandaRepository.dart';
 import 'package:takasukonomuro/business/services/funcionarioService.dart';
 import 'package:takasukonomuro/models/itemSubComanda.dart';

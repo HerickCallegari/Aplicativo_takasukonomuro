@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/Pages/gerente_pages/formulario_mesas_page.dart'
-import 'takasukonomuro/models/mesa.dart';
-import 'package:takasukonomuro/Pages/GerentePages/formulario_mesas_page.dart';
+import 'package:takasukonomuro/models/mesa.dart';
+import 'package:takasukonomuro/pages/gerente_pages/mesas_formulario_page.dart';
+import 'package:takasukonomuro/business/services/mesaService.dart';
+
+
 
 class CrudMesasPage extends StatefulWidget {
   @override

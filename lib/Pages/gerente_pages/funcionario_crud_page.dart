@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/business/services/funcionarioService.dart';
 import 'package:takasukonomuro/models/funcionario.dart';
-import 'package:takasukonomuro/Pages/gerente_pages/funcionario_formulario_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/funcionario_formulario_page.dart';
 
 class CrudFuncionariosPage extends StatefulWidget {
   @override

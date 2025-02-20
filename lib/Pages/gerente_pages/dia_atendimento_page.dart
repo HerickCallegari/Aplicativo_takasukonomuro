@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:takasukonomuro/pages/GerentePages/resumo_dia_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/resumo_dia_page.dart';
 
 class DiasAtendimentoPage extends StatefulWidget {
   @override
