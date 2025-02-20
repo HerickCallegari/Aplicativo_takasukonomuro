@@ -1,3 +1,4 @@
+import 'package:takasukonomuro/models/comanda.dart';
 import 'package:takasukonomuro/models/mesa.dart';
 
 abstract class IMesaRepository {

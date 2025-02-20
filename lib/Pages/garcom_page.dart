@@ -1,104 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Importando o pacote
+import 'package:takasukonomuro/business/services/mesaService.dart';
+import 'package:takasukonomuro/models/enums/status.dart';
+import 'package:takasukonomuro/models/mesa.dart';
 
-class GarcomPage extends StatelessWidget {
-  const GarcomPage({super.key});
+class GarcomPage extends StatefulWidget {
+  @override
+  _GarcomPage createState() => _GarcomPage();
+}
+
+class _GarcomPage extends State<GarcomPage> {
+  final MesaService mesaService = MesaService();
+  List<Mesa> mesas = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _CarregarDados();
+  }
+
+  void _CarregarDados() async {
+    mesas = await mesaService.findAll();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Kaleb'),
-        actions: [
-          CircleAvatar(
-            child: Text('K'),
-            backgroundColor: Colors.grey,
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Mesas',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 16),
-            GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: 9,
-              itemBuilder: (context, index) {
-                Color cardColor = (index % 2 == 0) ? Colors.green : Colors.red;
-                String mesaNumber = 'Mesa ${index % 3 == 0 ? 4 : (index % 3 == 1 ? 31 : 20)}';
-
-                // Alterando o ícone para o ícone de sushi
-                IconData mesaIcon = FontAwesomeIcons.fishFins; // Usando o ícone de sushi do FontAwesome
-
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  color: cardColor,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          mesaIcon,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          mesaNumber,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+      appBar: AppBar(title: Text('Kaleb')),
+      body: GridView.builder(
+        padding: EdgeInsets.all(10),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
         ),
+        itemCount: mesas.length,
+        itemBuilder: (context, index) {
+          return MesaCard(mesa: mesas[index]);
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
         ],
-        onTap: null,
+      ),
+    );
+  }
+}
+
+class MesaCard extends StatelessWidget {
+  final Mesa mesa;
+
+  MesaCard({required this.mesa});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        /*Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GarcomPage()));*/
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor:
+                  mesa.status == Status.Ocupado ? Colors.red : Colors.green,
+              child: Icon(Icons.table_restaurant, color: Colors.black),
+              radius: 30,
+            ),
+            SizedBox(height: 8),
+            Text(mesa.descricao, style: TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }

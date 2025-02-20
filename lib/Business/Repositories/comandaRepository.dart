@@ -187,4 +187,48 @@ class ComandaRepository implements IComandaRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<Comanda?> findOpenComanda(String mesaId, DateTime data) async {
+    try {
+      var response = await supabase
+          .from('Comandas')
+          .select('*')
+          .eq('Data', data.toIso8601String())
+          .eq('MesaId', mesaId)
+          .eq('HorarioFechamento', '')
+          .single();
+
+      if (response != null && response is Map<String, dynamic>) {
+        Comanda comanda = Comanda(
+            comandaId: response['ComandaId'] is int
+                ? response['ComandaId']
+                : int.parse(response['ComandaId']),
+            mesaId: response['MesaId'] is int
+                ? response['MesaId']
+                : int.parse(response['MesaId']),
+            funcionarioId: response['FuncionarioId'] is int
+                ? response['FuncionarioId']
+                : int.parse(response['FuncionarioId']),
+            data: DateTime.parse(response['Data']),
+            horarioAbertura: DateTime.parse(response['HorarioAbertura']),
+            valorTotal: response['ValorTotal'] is double
+                ? response['ValorTotal']
+                : double.parse(response['ValorTotal'].toString()),
+            pago: response['Pago'],
+            quantidadePessoas: response['QuantidadePessoas'] is int
+                ? response['QuantidadePessoas']
+                : int.parse(response['QuantidadePessoas'].toString()));
+        if (response['HorarioFechamento'] != null &&
+            response['HorarioFechamento'] != '') {
+          return null;
+        }
+        return comanda;
+      } else {
+        throw Exception("Dados do funcionário não encontrados.");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -108,4 +108,16 @@ class ComandaService implements IComandaService {
       rethrow;
     }
   }
+
+  @override
+  Future<Comanda?> findOpenComanda(String mesaId, DateTime data) {
+    if (mesaId == null || data == null || mesaId == '') {
+      throw Exception("Algum campo esta null.");
+    }
+    try {
+      return repository.findOpenComanda(mesaId, data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

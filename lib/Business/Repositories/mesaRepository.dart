@@ -2,6 +2,7 @@
 
 import 'package:takasukonomuro/business/repositories/interfaces/iMesaRepository.dart';
 import 'package:takasukonomuro/main.dart';
+import 'package:takasukonomuro/models/comanda.dart';
 import 'package:takasukonomuro/models/mesa.dart';
 import 'package:takasukonomuro/models/enums/status.dart';
 

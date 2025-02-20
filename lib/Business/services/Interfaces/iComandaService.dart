@@ -9,4 +9,5 @@ abstract class IComandaService {
   Future<Comanda?> findBy(String? id);
   Future<List<Comanda>> findAll();
   Future<List<Comanda>> findByDate(DateTime? data);
+  Future<Comanda?> findOpenComanda(String mesaId, DateTime data);
 }
