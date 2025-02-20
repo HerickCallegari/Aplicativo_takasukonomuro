@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:takasukonomuro/Pages/GerentePages/crud_mesas_page.Dart';
 import 'package:takasukonomuro/Pages/login_page.dart';
-import 'package:takasukonomuro/Pages/GerentePages/crud_itens_page.dart';
-import 'package:takasukonomuro/Pages/GerentePages/crud_funcionarios_page.dart';
-import 'package:takasukonomuro/Pages/GerentePages/resumo_dia_page.dart';
-import 'package:takasukonomuro/pages/GerentePages/dia_atendimento_page.dart';
+import 'package:takasukonomuro/Pages/gerente_pages/itens_crud_page.dart';
+import 'package:takasukonomuro/Pages/gerente_pages/funcionario_crud_page.dart';
+import 'package:takasukonomuro/Pages/gerente_pages/resumo_dia_page.dart';
+import 'package:takasukonomuro/pages/gerente_pages/dia_atendimento_page.dart';
 
 class GerentePage extends StatefulWidget {
   @override

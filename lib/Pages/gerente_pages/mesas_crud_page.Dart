@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:takasukonomuro/business/services/mesaService.dart';
-import 'package:takasukonomuro/models/mesa.dart';
+import 'package:takasukonomuro/Pages/gerente_pages/formulario_mesas_page.dart'package:takasukonomuro/models/mesa.dart';
 import 'package:takasukonomuro/Pages/GerentePages/formulario_mesas_page.dart';
 
 class CrudMesasPage extends StatefulWidget {
